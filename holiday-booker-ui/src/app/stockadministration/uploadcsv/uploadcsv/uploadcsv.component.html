@@ -1,0 +1,28 @@
+<div *ngIf="!uploading">
+    <h1 mat-dialog-title>CSV file uploading</h1>
+    <div mat-dialog-content>
+      <p>Make sure the .csv file is in the correct format</p>
+      <mat-form-field>
+        <mat-label>Supplier</mat-label>
+        <input matTooltip="Make sure about SPELLING" matInput [(ngModel)]="supplierName">
+      </mat-form-field>
+      <br>
+      <mat-form-field>
+        <mat-label>Admin Fee</mat-label>
+        <input matInput [(ngModel)]="adminFee">
+      </mat-form-field>
+      <br>
+      <button style="margin-bottom: 20px; padding-bottom: 5px;" mat-button (click)="CSVFile.click()">
+        <mat-icon>backup</mat-icon>
+      </button>
+      <input hidden type="file" accept=".csv" id="File" #CSVFile (change)="OpenFile($event)">
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="onNoClick()">No Thanks</button>
+      <button style="margin-left: 30%;" mat-button (click)="upload()" cdkFocusInitial>Upload & Process</button>
+    </div>
+</div>
+<div>
+    <mat-spinner *ngIf="uploading"></mat-spinner>
+</div>
+

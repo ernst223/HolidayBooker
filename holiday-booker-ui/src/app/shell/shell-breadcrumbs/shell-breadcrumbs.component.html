@@ -1,0 +1,6 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+    <ng-container *ngFor="let breadcrumb of breadcrumbs;let i = index">
+      <span class="breadcrumb" [routerLink]="[breadcrumb.url, breadcrumb.params]">{{breadcrumb.label}}</span>
+      <mat-icon *ngIf="i < breadcrumbs.length - 1">chevron_right</mat-icon>
+    </ng-container>
+  </div>

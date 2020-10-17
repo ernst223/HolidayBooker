@@ -1,0 +1,336 @@
+<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
+  <mat-card class="mat-card" fxFlex="100">
+    <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+        <div fxFlex="100" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+          <h3>New Stock
+            <button type="button" class="ml-1" matTooltip="Clear form" (click)=clearValues() mat-raised-button
+              color="primary">
+              Clear form values
+              <mat-icon>clear</mat-icon>
+            </button>
+          </h3>
+
+          <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="start center">
+            <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+              <mat-label>Provider</mat-label>
+              <mat-select [(ngModel)]="SelectedProvider">
+                <mat-option *ngFor="let entity of providerList" [value]="entity.id">{{entity.code}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                            <mat-label>Resort</mat-label>
+                            <mat-select [(ngModel)]="SelectedResort">
+                                <mat-option *ngFor="let entity of resorts" [value]="entity.id">
+                                    {{entity.description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+            <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+              <input type="text" placeholder="Resort" aria-label="Number" (ngModelChange)=UnitSizeSelected() matInput
+                [formControl]="myControl" [matAutocomplete]="autoRegion">
+              <mat-autocomplete #autoRegion="matAutocomplete" (optionSelected)="resortSelected($event)"
+                [displayWith]="displayData">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                  {{option.description}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+              <input type="number" name="txbAdminFee" [(ngModel)]="adminFee" placeholder="Admin Fee" value="99"
+                aria-label="Number" matInput>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap" fxFlex="100">
+            <div fxLayout="row wrap" fxFlex="100" *ngFor="let item of stockUnits; let i = index;trackBy:trackByIndex;">
+              <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                <mat-label>Unit Size</mat-label>
+                <mat-select [(ngModel)]="stockUnits[i].UnitId">
+                  <mat-option>-- None --</mat-option>
+                  <mat-option *ngFor="let entity of unitSizeFilter" [value]="entity.id">
+                    {{entity.description}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                <input matInput name="datePickerArrival" [matDatepicker]="picker" [(ngModel)]="stockUnits[i].Arrival"
+                  placeholder="Arrival">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <!--
+                            <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                                <input type="number" name="txbNights" [(ngModel)]="stockUnits[i].Nights"
+                                    placeholder="Nights" aria-label="Number" matInput>
+                            </mat-form-field> -->
+
+              <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                <input type="number" placeholder="Nights" [(ngModel)]="stockUnits[i].Nights" aria-label="Number"
+                  matInput [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of autoNights" [value]="option">
+                    {{option}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                <input type="number" name="txbBuyingPrice" [(ngModel)]="stockUnits[i].BuyingPrice"
+                  placeholder="Buying Price" aria-label="Number" matInput>
+              </mat-form-field>
+              <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                <input type="number" name="txbPrice2pay" [(ngModel)]="stockUnits[i].Price2Pay" placeholder="Price 2 Pay"
+                  aria-label="Number" matInput>
+              </mat-form-field>
+              <button type="button" matTooltip="Remove Row" (click)=removeUnit(i) mat-icon-button color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <div>
+              <button type="button" style="margin-left: 25px; margin-bottom: 15px; margin-top: 10px; margin-right: 30px"
+                matTooltip="add another unit size" (click)=addUnit() mat-raised-button color="primary">
+                Add new Line
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+
+
+          <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            <!-- <button type="button" matTooltip="Nuwe Bestelling" (click)=addSupplier() mat-raised-button color="primary" >
+                            Add Provider
+                            <mat-icon>add</mat-icon>
+                        </button> -->
+                        <!-- <button type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="Check For Duplicates" (click)=checkForDuplicates()
+                        mat-raised-button color="primary">
+                        Check Stock
+                        <mat-icon>toll</mat-icon>
+                      </button> -->
+            <button type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="New Stock" (click)=checkForDuplicates()
+              mat-raised-button color="primary">
+              Save Stock
+              <mat-icon>save</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="mat-card tab-row" fxFlex="100">
+    <mat-card-content fxFlex="100" fxLayout="row wrap">
+      <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field>
+        <div>
+          <!-- Advance Filtering for the stock -->
+          <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+            <mat-label>Provider</mat-label>
+            <mat-select [(ngModel)]="SelectedProviderFilter">
+              <mat-option *ngFor="let entity of providerList" [value]="entity.id">{{entity.code}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field [fxFlex]=25 fxFlexOffset="3">
+            <input type="text" placeholder="Resort" aria-label="Number" (ngModelChange)=UnitSizeSelected() matInput
+              [formControl]="myControl" [matAutocomplete]="autoRegionFilter">
+            <mat-autocomplete #autoRegionFilter="matAutocomplete" (optionSelected)="resortSelectedFilter($event)"
+              [displayWith]="displayData">
+              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.description}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+            <input matInput name="datePickerArrival"  [(ngModel)]="ArrivalFiltered" [matDatepicker]="picker"
+              placeholder="Arrival">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <button type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="Filter the Stock" (click)=advanceFilter()
+            mat-raised-button color="primary">
+            Advance Filter
+            <mat-icon>filter_list</mat-icon>
+          </button>
+          <button type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="Clear Advance Filter" (click)=clearFilter()
+            mat-raised-button color="primary">
+            Clear
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </div>
+
+        <div  fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            <button fxLayoutAlign="end center" type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="Download Spreadsheet" (click)=downloadExcel()
+            mat-raised-button color="primary">
+            Export To Excel
+            <mat-icon>cloud_download</mat-icon>
+          </button>
+          <button fxLayoutAlign="end center" type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="Upload Spreadsheet" (click)=uploadCSV()
+            mat-raised-button color="primary">
+            Upload CSV
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+
+        <!-- Filtering according to Hold, Sold or Null  -->
+        <mat-form-field [fxFlex]=15>
+            <mat-label>State Filtering</mat-label>
+            <mat-select [(ngModel)]="SelectedStateFilter" (selectionChange)="filterAccordingToState()">
+              <mat-option *ngFor="let entity of HoldSoldFilter" [value]="entity.value">{{entity.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      <mat-table fxFlex="100" #table [dataSource]="orderDataSource" matSort>
+        <ng-container matColumnDef="Provider">
+          <mat-header-cell *matHeaderCellDef > Provider </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <p *ngIf="!testEditabliity(element.id)"> {{element.provider}}</p>
+            <mat-form-field *ngIf="testEditabliity(element.id)" fxFlex="70px">
+              <mat-label>Provider</mat-label>
+              <mat-select [(ngModel)]="EditProviderValue">
+                <mat-option *ngFor="let entity of providerList" [value]="entity.id">{{entity.code}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Resort">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Resort </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> {{element.resort}}</p>
+            <mat-form-field *ngIf="testEditabliity(element.id)" fxFlex="70px">
+              <mat-label>Provider</mat-label>
+              <mat-select [(ngModel)]="EditResortValue">
+                <mat-option *ngFor="let entity of resorts" [value]="entity.id">{{entity.description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Unitsize">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Unit Size </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> {{element.unitSize}}</p>
+            <mat-form-field *ngIf="testEditabliity(element.id)" fxFlex="70px">
+              <mat-label>UnitSize</mat-label>
+              <mat-select [(ngModel)]="EditUnitSizeValue">
+                <mat-option *ngFor="let entity of unitSize" [value]="entity.id">{{entity.description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Arrival">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Arrival </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> {{element.arrival  | date: 'dd/MM/yyyy'}}</p>
+            <mat-form-field *ngIf="testEditabliity(element.id)" fxFlex="70px">
+              <input matInput [matDatepicker]="picker" [(ngModel)]="EditArivalValue" placeholder="Arrival">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Nights">
+          <mat-header-cell *matHeaderCellDef  fxHide.lt-md> Nights </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> {{element.nights}}</p>
+            <mat-form-field fxFlex="70px" *ngIf="testEditabliity(element.id)">
+              <input type="number" [(ngModel)]="EditNightsValue" placeholder="Nights" aria-label="Number" matInput>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="BuyingPrice">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Buying Price </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> R{{element.buyingPrice}}</p>
+            <mat-form-field fxFlex="70px" *ngIf="testEditabliity(element.id)">
+              <input type="number" [(ngModel)]="EditBuyingPriceValue" placeholder="Buying Price" aria-label="Number"
+                matInput>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Price2Pay">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Price 2 Pay </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> R{{element.price2Pay}}</p>
+            <mat-form-field fxFlex="70px" *ngIf="testEditabliity(element.id)">
+              <input type="number" [(ngModel)]="EditPrice2PayValue" placeholder="Price2Pay" aria-label="Number"
+                matInput>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Profit">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Profit </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            R{{getProfit(element.buyingPrice, element.price2Pay)}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="AdminFee">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> Admin Fee </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <p *ngIf="!testEditabliity(element.id)"> {{element.adminFee}}</p>
+            <mat-form-field fxFlex="70px" *ngIf="testEditabliity(element.id)">
+              <input type="number" [(ngModel)]="EditAdminFeeValue" placeholder="AdminFee" aria-label="Number" matInput>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Hold">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> On Hold </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <label class="container" style="margin-top: 5px">Hold
+              <input type="checkbox" [disabled]="element.sold" (change)="Hold(element.hold, element.id)" [checked]="getHoldStatus(element.hold)">
+              <span class="checkmark"></span>
+            </label>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="State">
+          <mat-header-cell *matHeaderCellDef fxHide.lt-md> State </mat-header-cell>
+          <mat-cell *matCellDef="let element" fxHide.lt-md>
+            <label class="container" style="margin-top: 5px">Sold
+              <input type="checkbox" (change)="Sold(element.sold, element.id)" [checked]="getSoldStatus(element.sold)">
+              <span class="checkmark"></span>
+            </label>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="Actions">
+          <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+            <button matTooltip="Edit" *ngIf="!testEditabliity(element.id)" mat-icon-button color="primary"
+              (click)="edit(element.id,element.providerId, element.resortId,element.unitSizeId, element.arrival,element.nights,element.buyingPrice,element.price2Pay,element.adminFee)">
+              <mat-icon aria-label="">edit</mat-icon>
+            </button>
+            <button matTooltip="Delete" *ngIf="!testEditabliity(element.id)" mat-icon-button color="warn"
+              (click)="delete(element.id)">
+              <mat-icon aria-label="">delete</mat-icon>
+            </button>
+
+            <button matTooltip="Save" *ngIf="testEditabliity(element.id)" mat-icon-button color="primary"
+              (click)=SaveEdit(element.id)>
+              <mat-icon aria-label="">save</mat-icon>
+            </button>
+            <button matTooltip="Cancel" *ngIf="testEditabliity(element.id)" mat-icon-button color="warn"
+              (click)="ChangeEditMe()">
+              <mat-icon aria-label="">cancel</mat-icon>
+            </button>
+
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"
+          [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+      </mat-table>
+      <div fxFlex="grow">
+        <mat-paginator #paginator [pageSize]="25" [pageSizeOptions]="[25, 50, 100]" [showFirstLastButtons]="true">
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

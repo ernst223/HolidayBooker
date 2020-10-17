@@ -1,0 +1,109 @@
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+  <div class="container">
+      <!-- <a class="navbar-brand" href="index.html">Holiday Booker</a> -->
+      <a class="navbar-brand"><img class="myImage" src='images/hb_logo.png'></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+          aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+      </button>
+
+      <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a href="" class="nav-link">Home</a></li>
+              <li class="nav-item active"><a class="nav-link">About</a></li>
+              <li class="nav-item cta"><a (click)="moveToContact()" class="nav-link">Contact</a></li>
+          </ul>
+      </div>
+  </div>
+</nav>
+<!-- END nav -->
+<div class="hero-wrap" style="background-image: url('images/bg_2.jpg');" >
+  <div class="container" >
+    <div class="row no-gutters slider-text align-items-center justify-content-start">
+        <div class="col-md-9  search-container" fxLayout="row wrap" [fxFlex]="100" style="margin-top: 12vw;" fxLayoutAlign="start center" >
+            <h1 class="mb-4"><strong>About Holiday Booker
+                <br></strong> Why not Join us?</h1>
+        </div>
+    </div>
+  </div>
+</div>
+<section #AboutSection id="AboutSection">
+      <h1 fxLayoutAlign="center center">About Us</h1>
+      <div >
+          <p>HolidayBooker was established in 2008 and is one of the leading operators of affordable
+              family holidays around South Africa and Mozambique
+              (mainly in a self-catering holiday resort environment).
+              In the past decade we have sent thousands of happy families on great,
+              affordable & memorable holidays.</p>
+
+          <p>Our aim is to provide the opportunity for families and friends through
+              which they can create priceless memories of fun-filled Holidays with
+              relaxing amenities in a growing number of existing destinations. Whether you
+              love a beachside escape, a mountain retreat or a Bush experience – find your next holiday
+              destination and resort all in one place. Holidays are always about the experience!!</p>
+
+          <p>
+              We strive to offer excellent and honest service with the best value for money.
+          </p>
+          <p>
+              Our goal is to find the best affordable family holiday for our more than 15 000 members.
+          </p>
+          <p>
+              Book your next holiday and save up to 80% on your next family holiday.
+          </p>
+          <p>
+              View our latest specials for this week. You can make a no-obligation provisional
+              booking by clicking on the envelope, complete your details, and we would get back to you ASAP
+          </p>
+          <p>
+              For more information you can send an email to info@holidaybooker.co.za Or phone <b><a style="color: blue" href="tel:012-755-7555"><span class="icon icon-phone"></span><span
+                class="text">   (+27)12-755-7555</span></a> & <a style="color: blue" href="tel:083-509-8334"><span class="icon icon-phone"></span><span
+                  class="text">   (+27)83-509-8334</span></a> (WhatssApp welcome)</b>
+          </p>
+      </div>
+</section>
+
+<section #Join id="JoinSection">
+
+<h1 fxLayoutAlign="center center">Be the First to know</h1>
+<div style="text-align: center" >
+  <p style="text-align: center">Get our lowest price deal before everyone else. Become part of our VIP database, register with your email address Now!</p>
+  <input matinput placeholder="Your Email" [(ngModel)]="SubmitEmailValue" style="margin-left: 5px" type="email">
+  <button color="primary" style="margin: 5px" (click)="submitEmail()"  mat-raised-button>Submit</button>
+</div>
+
+</section>
+
+<footer id="ContactSection" #ContactSection class="ftco-footer ftco-bg-dark ftco-section">
+  <div class="container">
+      <div class="row mb-5">
+          <div class="col-md">
+              <div class="ftco-footer-widget mb-4">
+                  <h2 class="ftco-heading-2">Contact us</h2>
+                  <div class="block-23 mb-3">
+                      <ul>
+
+                          <li><a href="#"><span class="icon icon-phone"></span><span
+                                      class="text">(+27)12-755-7555</span></a></li>
+                          <li><a href="info@holidaybooker.co.za"><span class="icon icon-envelope"></span><span
+                                      class="text">info@holidaybooker.co.za</span></a></li>
+                          <li><a href="https://www.facebook.com/holidaybooker.co.za/"><span class="icon icon-facebook"></span><span class="text">Why not visit our Facebook!</span></a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12 text-center">
+
+              <p>
+                  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                  Copyright &copy;
+                  2019 All rights reserved
+                  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              </p>
+          </div>
+      </div>
+  </div>
+</footer>
+

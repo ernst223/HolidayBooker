@@ -1,0 +1,40 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav  mat-elevation-z15" fixedInViewport="true"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="!(isHandset$ | async)">
+        <div class="mt-1 ml-1 mb-1" fxLayout="row" fxLayoutAlign="center center">
+          <img class="logo" fxFlex="60" src="../../assets/newLogo.jpg">
+        </div>
+        <mat-divider></mat-divider>
+        <app-shell-nav-list [menuItems]="menuItems"></app-shell-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content fxLayout="row wrap" fxLayoutAlign="start start" >
+      <mat-toolbar class="main-toolbar" fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100">
+        <div>
+          <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+          <button type="button" mat-icon-button routerLink="/dashboard">
+            <mat-icon color="accent">home</mat-icon>
+          </button>
+          <div class="breadcrumbs" fxFlex="75">
+            <app-shell-breadcrumbs></app-shell-breadcrumbs>
+          </div>
+        </div>
+        <div fxLayout="row" fxFlex="100" fxLayoutAlign="end end" style="margin-right: 400px">
+          <button type="button" mat-icon-button [matMenuTriggerFor]="loginMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #loginMenu="matMenu">
+            <button mat-menu-item (click)="signOut()">
+              <mat-icon>exit_to_app</mat-icon>
+              <span>Sign Out</span>
+            </button>
+          </mat-menu>
+        </div>
+      </mat-toolbar>
+      <div fxFlex="grow">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>

@@ -1,0 +1,8 @@
+@import 'src/theme';
+
+$text-color: mat-contrast($ecp-app-primary, default);
+
+.breadcrumb {
+    color: $text-color;
+    cursor: pointer;
+}

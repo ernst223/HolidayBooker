@@ -1,0 +1,178 @@
+<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
+    <mat-card class="mat-card" fxFlex="100">
+        <mat-card-content>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="100" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+                    <h3>New resort</h3>
+                    <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="start center">
+                        <mat-form-field fxFlexOffset="3">
+                            <input type="text" name="txbDescription" [(ngModel)]="DescriptionValue"
+                                placeholder="Description" aria-label="Number" matInput>
+                        </mat-form-field>
+                        <!-- <mat-form-field fxFlexOffset="3">
+                            <mat-label>Area</mat-label>
+                            <mat-select [(ngModel)]="SelectedRegion">
+                                <mat-option *ngFor="let enitity of regions" [value]="enitity.id">
+                                    {{enitity.description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+
+                        <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                          <input type="text" placeholder="Area" aria-label="Number"
+                              (ngModelChange)=setResort() matInput [formControl]="myControl"
+                              [matAutocomplete]="autoRegion">
+                          <mat-autocomplete #autoRegion="matAutocomplete" (optionSelected)="regionSelected($event)"
+                              [displayWith]="displayData">
+                              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                  {{option.description}}
+                              </mat-option>
+                          </mat-autocomplete>
+                      </mat-form-field>
+
+                        <mat-form-field fxFlexOffset="3">
+                            <mat-label>UnitSizes</mat-label>
+                            <mat-select [formControl]="UnitSizeControl" multiple>
+                              <mat-option *ngFor="let unit of unitSize" [value]="unit">{{unit.description}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <mat-form-field fxFlexOffset="3" [fxFlex]="35">
+                          <input type="text" name="txbLink" [(ngModel)]="LinkValue" placeholder="Link URL"
+                              aria-label="Number" matInput>
+                      </mat-form-field>
+                      <mat-form-field fxFlexOffset="3" [fxFlex]="35">
+                        <input type="text" name="txbCoordinate" [(ngModel)]="CoordinateValue" placeholder="Coordinates"
+                            aria-label="Number" matInput>
+                    </mat-form-field>
+                        <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+                            <button type="button" style="margin-left: 25px; margin-bottom: 15px"
+                                matTooltip="Save Resort" (click)=add() mat-raised-button color="primary">
+                                Save Resort
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #table [dataSource]="resortDataSource" matSort>
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <p *ngIf="!testEditMe(element.id)">{{element.description}}</p>
+
+                        <mat-form-field *ngIf="testEditMe(element.id)" fxFlexOffset="3">
+                            <input type="text" name="txbDescription" [(ngModel)]="EditDescriptionValue"
+                                placeholder="Description" aria-label="Number" matInput>
+                        </mat-form-field>
+
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Region">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Area </mat-header-cell>
+                    <mat-cell *matCellDef="let element" fxHide.lt-md>
+                        <p *ngIf="!testEditMe(element.id)">{{element.region}}</p>
+                        <mat-form-field fxFlexOffset="3" *ngIf="testEditMe(element.id)">
+                            <mat-label>Region</mat-label>
+                            <mat-select [(ngModel)]="EditSelectedRegion">
+                                <mat-option *ngFor="let subEntity of regions" [value]="subEntity.id">
+                                    {{subEntity.description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Area">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Region </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p>{{element.area}}</p>
+                  </mat-cell>
+              </ng-container>
+                <ng-container matColumnDef="Country">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Country </mat-header-cell>
+                    <mat-cell *matCellDef="let element" fxHide.lt-md>
+                      <p>{{element.country}}</p>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Coordinates">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Coordinates </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p *ngIf="!testEditMe(element.id)">{{element.coordinates}}</p>
+                    <mat-form-field *ngIf="testEditMe(element.id)" fxFlexOffset="3">
+                      <input type="text" name="txbLink" [(ngModel)]="EditCoordinates" placeholder="Longitude & Latitude"
+                          aria-label="Number" matInput>
+                  </mat-form-field>
+                  </mat-cell>
+              </ng-container>
+                <ng-container matColumnDef="units">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header fxFlex="200px"> Units </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxFlex="200px" >
+                      <button matTooltip="Show the UnitSizes" *ngIf="!testShowUnitSize(element.id)" mat-icon-button (click)=showUnitSizes(element.id)>
+                              <mat-icon aria-label="">reorder</mat-icon>
+                          </button>
+
+                          <mat-form-field *ngIf="testShowUnitSize(element.id)" style="width: 120px">
+                              <mat-label>UnitSizes</mat-label>
+                              <mat-select [formControl]="editUnitSizeControl"   multiple>
+                                <mat-option *ngFor="let unit of unitSize" [value]="unit.id">{{unit.description}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <button matTooltip="Save UnitSizes" style="margin-right: 5px" *ngIf="testShowUnitSize(element.id)" (click)=saveUnitSizes(element.id) mat-icon-button>
+                              <mat-icon aria-label="">save</mat-icon>
+                          </button>
+                  </mat-cell>
+              </ng-container>
+                <ng-container matColumnDef="Link">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Link </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                      <p *ngIf="!testEditMe(element.id)">{{element.link}}</p>
+                      <mat-form-field *ngIf="testEditMe(element.id)" fxFlexOffset="3">
+                          <input type="text" name="txbLink" [(ngModel)]="EditLinkValue" placeholder="Link URL"
+                              aria-label="Number" matInput>
+                      </mat-form-field>
+                  </mat-cell>
+              </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxFlex="100px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxFlex="100px" fxLayoutAlign="end center">
+
+                        <button matTooltip="Edit" *ngIf="!testEditMe(element.id)" mat-icon-button color="primary"
+                            (click)="edit(element.id,element.description,element.link, element.regionId, element.coordinates)">
+                            <mat-icon aria-label="">edit</mat-icon>
+                        </button>
+                        <button matTooltip="Delete" *ngIf="!testEditMe(element.id)" mat-icon-button color="warn"
+                            (click)="delete(element.id)">
+                            <mat-icon aria-label="">delete</mat-icon>
+                        </button>
+
+                        <button matTooltip="Save" *ngIf="testEditMe(element.id)" mat-icon-button color="primary"
+                            (click)=SaveEdit(element.id)>
+                            <mat-icon aria-label="">save</mat-icon>
+                        </button>
+                        <button matTooltip="Cancel" *ngIf="testEditMe(element.id)" mat-icon-button color="warn"
+                            (click)="ChangeEditMe()">
+                            <mat-icon aria-label="">cancel</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'edit-class': selectedRowIndex === row.id}" (click)="selectRow(row)"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

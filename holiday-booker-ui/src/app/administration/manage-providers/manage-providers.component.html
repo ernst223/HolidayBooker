@@ -1,0 +1,125 @@
+<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
+    <mat-card class="mat-card" fxFlex="100">
+        <mat-card-content>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="100" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+                    <form>
+                        <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="start center">
+                            <h3 class="new-heading" fxFlex="100">
+                                New Provider:
+                            </h3>
+                            <mat-form-field fxFlex="20" fxFlexOffset="3">
+                                <input type="text" name="txbDescription" [(ngModel)]="DescriptionValue"
+                                    placeholder="Description" aria-label="Number" matInput>
+                            </mat-form-field>
+
+                            <mat-form-field fxFlexOffset="3" fxFlex="15" >
+                                <input type="text" name="txbCode" [(ngModel)]="CodeValue" placeholder="Code"
+                                    aria-label="Number" matInput>
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="15"  fxFlexOffset="3">
+                                <input type="text" name="txbEmail" [(ngModel)]="EmailValue" placeholder="Email"
+                                    aria-label="Number" matInput>
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="15" fxFlexOffset="3">
+                                <input type="text" name="txbContact" [(ngModel)]="ContactValue"
+                                    placeholder="Contact Info" aria-label="Number" matInput>
+                            </mat-form-field>
+                            <button type="button" style="margin-left: 25px; margin-bottom: 15px"
+                                matTooltip="New Supplier" (click)=add() mat-raised-button color="primary">
+                                Save Provider
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #table [dataSource]="orderDataSource" matSort>
+                <ng-container matColumnDef="Code">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Code </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> 
+                            <p *ngIf="!testEditabliity(element.id)"> {{element.code}}</p>
+                            <mat-form-field fxFlex="170px" *ngIf="testEditabliity(element.id)">
+                                <input type="text" [(ngModel)]="EditCodeValue"
+                                    placeholder="Code" aria-label="Number" matInput>
+                            </mat-form-field>    
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> 
+                            <p *ngIf="!testEditabliity(element.id)"> {{element.description}}</p>
+                            <mat-form-field fxFlex="170px" *ngIf="testEditabliity(element.id)">
+                                <input type="text" [(ngModel)]="EditDescriptionValue"
+                                    placeholder="Description" aria-label="Number" matInput>
+                            </mat-form-field>    
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Email">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Email </mat-header-cell>
+                    <mat-cell *matCellDef="let element" fxHide.lt-md> 
+                            <p *ngIf="!testEditabliity(element.id)"> {{element.email}}</p>
+                            <mat-form-field fxFlex="170px" *ngIf="testEditabliity(element.id)">
+                                <input type="text" [(ngModel)]="EditEmailValue"
+                                    placeholder="Email" aria-label="Number" matInput>
+                            </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Contact">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Contact </mat-header-cell>
+                    <mat-cell *matCellDef="let element" fxHide.lt-md> 
+                            <p *ngIf="!testEditabliity(element.id)"> {{element.contact}}</p>
+                            <mat-form-field fxFlex="170px" *ngIf="testEditabliity(element.id)">
+                                <input type="text" [(ngModel)]="EditContactValue"
+                                    placeholder="Contact" aria-label="Number" matInput>
+                            </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+
+
+                        <button matTooltip="Edit" *ngIf="!testEditabliity(element.id)" mat-icon-button color="primary"
+                         (click)="edit(element.id,element.code,element.description, element.email, element.contact )">
+                            <mat-icon aria-label="">edit</mat-icon>
+                        </button>
+                        <button matTooltip="Delete" *ngIf="!testEditabliity(element.id)" mat-icon-button color="warn"
+                            (click)="delete(element.id)">
+                            <mat-icon aria-label="">delete</mat-icon>
+                        </button>
+
+                        <button matTooltip="Save" *ngIf="testEditabliity(element.id)" mat-icon-button color="primary"
+                        (click)=SaveEdit(element.id)>
+                        <mat-icon aria-label="">save</mat-icon>
+                    </button>
+                    <button matTooltip="Cancel" *ngIf="testEditabliity(element.id)" mat-icon-button color="warn"
+                        (click)="ChangeEditMe()">
+                        <mat-icon aria-label="">cancel</mat-icon>
+                    </button>
+
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" 
+                [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

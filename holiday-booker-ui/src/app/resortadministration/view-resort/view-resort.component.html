@@ -1,0 +1,55 @@
+<div fxFlex="100" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+        <h2>View resort</h2>
+        <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="start center">
+            <mat-form-field fxFlex.lt-md="100" fxFlexOffset="3">
+                <input type="text" name="txbDescription" placeholder="Description" aria-label="Number"
+                    matInput>
+            </mat-form-field>
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                    <mat-label>Region</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let enitity of regions" [value]="enitity.value">
+                        {{enitity.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            
+                  <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                        <mat-label>Country</mat-label>
+                        <mat-select>
+                          <mat-option *ngFor="let enitity of countries" [value]="enitity.value">
+                            {{enitity.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="start start">
+            <div class="unit-control" fxLayout="column" *ngFor="let item of UnitCount; let i = index" > 
+                <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                        <mat-label>Unit Size</mat-label>
+                        <mat-select id="txbUnitSize{{i}}">
+                          <mat-option *ngFor="let enitity of unitSize" [value]="enitity.value">
+                            {{enitity.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>              
+            </div>
+            <div>
+                <button type="button" style="margin-left: 25px; margin-bottom: 15px; margin-top: 20px; margin-right: 30px"
+                    matTooltip="add another unit size" (click)=addUnit() mat-icon-button color="warn">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            <!-- <button type="button" matTooltip="Nuwe Bestelling" (click)=addSupplier() mat-raised-button color="primary" >
+                Add Provider
+                <mat-icon>add</mat-icon>
+            </button> -->
+            <button type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="New Resort"
+                (click)=edit() mat-raised-button color="primary">
+                Save Resort
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>

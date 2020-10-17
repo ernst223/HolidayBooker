@@ -1,0 +1,10 @@
+<h1>Warning</h1>
+<h2 mat-dialog-title>Found Some Duplicates:</h2>
+<div mat-dialog-content>
+  <div *ngFor="let item of myData">
+      <p><b>Stock id: </b>{{item.id}}&nbsp; &nbsp; <b>Resort: </b>{{item.resort}}&nbsp; &nbsp; <b>Provider: </b>{{item.provider}}&nbsp; &nbsp;  <b>Arrival: </b>{{item.arrival}}</p>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>Ok</button>
+</div>

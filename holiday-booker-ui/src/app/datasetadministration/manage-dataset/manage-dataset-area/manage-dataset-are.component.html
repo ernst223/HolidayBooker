@@ -1,0 +1,109 @@
+<div fxLayout="row wrap" fxLayoutAlign="start start">
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="100" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+                    <form fxLayout="row wrap" fxFlex="100">
+                        <div fxFlex="100"  fxLayoutAlign="start center">
+                                <h3 class="new-heading">
+                                        New Region:
+                                    </h3>
+                            <mat-form-field fxFlex="15"  fxFlexOffset="3">
+                                <input type="text" name="txbDescription" [(ngModel)]="DescriptionValue"
+                                    placeholder="Description" aria-label="Number" matInput>
+                            </mat-form-field>
+                            <mat-form-field fxFlexOffset="3" fxFlex="15">
+                                <mat-label>Country</mat-label>
+                                <mat-select [(ngModel)]="SelectedCountry"  name="cbxCountry">
+                                    <mat-option *ngFor="let enitity of countries" [value]="enitity.id">
+                                        {{enitity.description}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <button type="button" style="margin-left: 25px; margin-bottom: 15px"
+                                matTooltip="New Region" (click)=add() mat-raised-button color="primary">
+                                Add Region
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+                <!-- <button type="button" matTooltip="Nuwe Bestelling" (click)=addSupplier() mat-raised-button color="primary" >
+                            Add Provider
+                            <mat-icon>add</mat-icon>
+                        </button> -->
+            </div>
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div>
+            <mat-table fxFlex="100" #table [dataSource]="orderDataSource" matSort>
+                <ng-container matColumnDef="Id">
+                    <mat-header-cell fxFlex="10" *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+                    <mat-cell fxFlex="10" *matCellDef="let element"> {{element.id}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                            <p *ngIf="!testEditabliity(element.id)"> {{element.description}}</p>
+                            <mat-form-field fxFlex="250px"  *ngIf="testEditabliity(element.id)">
+                                    <input type="text" name="txbDescription" [(ngModel)]="EditDescriptionValue"
+                                        placeholder="Description" aria-label="Number" matInput>
+                                </mat-form-field>
+                         </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Country">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header fxHide.lt-md> Country </mat-header-cell>
+                    <mat-cell *matCellDef="let element" fxHide.lt-md>
+
+                        <p *ngIf="!testEditabliity(element.id)">{{element.country}}</p>
+                        <mat-form-field *ngIf="testEditabliity(element.id)" fxFlexOffset="3">
+                            <mat-label>Country</mat-label>
+                            <mat-select [(ngModel)]="EditSelectedCountry" name="cbxCountryEdit">
+                                <mat-option *ngFor="let enitity of countries" [value]="enitity.id">
+                                    {{enitity.description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                    <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+
+
+                        <button matTooltip="Edit" *ngIf="!testEditabliity(element.id)" mat-icon-button color="primary" (click)="edit(element.id, element.description, element.countryId)">
+                            <mat-icon aria-label="">edit</mat-icon>
+                        </button>
+                        <button matTooltip="Delete" *ngIf="!testEditabliity(element.id)" mat-icon-button color="warn" (click)="delete(element.id)">
+                            <mat-icon aria-label="">delete</mat-icon>
+                        </button>
+
+                        <button matTooltip="Save" *ngIf="testEditabliity(element.id)" mat-icon-button color="primary"
+                        (click)=SaveEdit(element.id)>
+                        <mat-icon aria-label="">save</mat-icon>
+                    </button>
+                    <button matTooltip="Cancel" *ngIf="testEditabliity(element.id)" mat-icon-button color="warn"
+                        (click)="ChangeEditMe()">
+                        <mat-icon aria-label="">cancel</mat-icon>
+                    </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+            </mat-table>
+            <div fxFlex="grow">
+                <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+                </mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

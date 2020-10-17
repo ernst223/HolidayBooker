@@ -1,0 +1,235 @@
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <!-- <a class="navbar-brand" href="index.html">Holiday Booker</a> -->
+        <a class="navbar-brand"><img class="myImage" src='images/hb_logo.png'></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+            aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a href="" class="nav-link">Home</a></li>
+                <li class="nav-item"><a (click)="moveToAbout()" class="nav-link">About</a></li>
+                <li class="nav-item cta"><a (click)="moveToContact()" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- END nav -->
+<div class="hero-wrap" style="min-height: 1080px; background-image: url('images/bg_2.jpg');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-start">
+            <div class="search-container display-inline" fxLayout="row wrap" fxLayoutAlign="start center">
+                <h1 class="mb-4"><strong>Holiday Availability
+                        <br></strong> Book Now</h1>
+                <mat-dialog-content style="min-height: 815px;">
+                    <form fxLayout="row wrap" [fxFlex]="100" fxLayoutGap="2em" class="block-17"
+                        style="margin-bottom: 5em; padding: 2em;" fxLayoutAlign="start center">
+                        <label [fxFlex]="100" class="heading-label" style="color: black;">Country:</label>
+                        <mat-form-field fxFlex="33" fxFlex.lt-md="100">
+                            <mat-select (selectionChange)="onCountryChange()" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="selectedCountry">
+                                <mat-option *ngFor="let country of Countries" [value]="country.id">
+                                    {{country.description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <label [fxFlex]="100" class="heading-label-region" style="color: black;">Regions you would like
+                            to visit:</label>
+                        <div [fxFlex]="100" style="color:black ">
+                            <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAll"
+                                (change)="selectThemAll()">
+                                <b>Select All</b></mat-checkbox>
+                        </div>
+                        <div fxLayout="row wrap" fxFlex="100">
+                            <div [fxFlex]="33" fxFlex.lt-md="50" *ngFor="let entity of Areas; let i = index">
+                                <div style="color: black;" class="checkboxClass">
+                                    <mat-checkbox [ngModelOptions]="{standalone: true}" [(ngModel)]="AreaChoices[i]">
+                                        {{entity.description}}</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label style="color: black;" class="heading-label-arrive" [fxFlex]="100">When would you like to
+                            Arrive:</label>
+
+                        <!-- <mat-form-field [fxFlex.gt-lg]="30" [fxFlex.gt-md]="100" [fxFlex.gt-sm]="100">
+                            <input matInput name="datePickerArrival" id="matInputEle" style="color: black" [matDatepicker]="picker" (focus)="picker.open()"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="ArrivalIn" placeholder="Arrival (Optional)">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field> -->
+
+                        <mat-calendar [fxFlex.gt-lg]="35" style="color: black; background: #FFC5B9; font-weight: 900;" [fxFlex.gt-md]="25" [fxFlex.gt-sm]="25"
+                            name="myCalendar" [(selected)]="SelectedDate"></mat-calendar>
+
+                        <label style="color: black;" class="heading-label-arrive" [fxFlex]="100">For how long would you like to stay:</label>
+
+                        <mat-radio-group style="margin-top: 20px;" [fxFlex]=100 fxLayout="row wrap" fxFlexOffset="3"
+                            aria-label="Select an option" name="myNights" [(ngModel)]="chosenNight">
+                            <mat-radio-button [fxFlex]="50" style="color: Black" value="3">3 Nights</mat-radio-button>
+                            <mat-radio-button [fxFlex]="50" style="color: Black" value="4">4 Nights</mat-radio-button>
+                            <mat-radio-button [fxFlex]="50" style="color: Black" value="5">5 Nights</mat-radio-button>
+                            <mat-radio-button [fxFlex]="50" style="color: Black" value="7">7 Nights</mat-radio-button>
+                            <mat-radio-button [fxFlex]="50" style="color: Black" value="8">8 Nights</mat-radio-button>
+                            <mat-radio-button [fxFlex]="50" style="color: Black" value="10">10 Nights</mat-radio-button>
+                        </mat-radio-group>
+
+                        <!-- <mat-form-field [fxFlex]=15 fxFlexOffset="3">
+                            <input style="color: black" type="number" placeholder="Nights"
+                                [ngModelOptions]="{standalone: true}" [(ngModel)]="nightFilter" aria-label="Number"
+                                matInput [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let night of nights" [value]="night">
+                                    {{night}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field> -->
+
+                        <div fxFlex="100" fxLayout="row" fxLayoutAlign="end center">
+                            <button color="primary" fxFlexAlign="end" [fxFlex]="33" (click)="Filter()"
+                                mat-raised-button>Search</button>
+                        </div>
+                    </form>
+                </mat-dialog-content>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="ftco-section services-section">
+    <div class="container">
+        <div class="row d-flex">
+            <mat-card class="mat-card tab-row" fxFlex="100">
+                <mat-card-content fxLayout="row wrap" fxLayoutAlign="space-between center">
+                    <div class="InstructionsText">
+                        <p><b>Click on the Blue resort name below to get information regarding the
+                                resort.
+                                Click on the Envelope to make a provisional booking. Complete your information and we
+                                will
+                                contact you ASAP.</b>
+                        </p>
+                        <p><b>For more information you can send an email to
+                                <a style="color: blue" href="mailto:info@holidaybooker.co.za"><span
+                                        class="icon icon-envelope"></span><span class="text">
+                                        info@holidaybooker.co.za</span></a>
+                                Or phone <a style="color: blue" href="tel:012-755-7555"><span
+                                        class="icon icon-phone"></span><span class="text"> (+27)12-755-7555</span></a> &
+                                <a style="color: blue" href="tel:083-509-8334"><span
+                                        class="icon icon-phone"></span><span class="text"> (+27)83-509-8334</span></a>
+                                (WhatssApp welcome)</b></p>
+                    </div>
+                    <mat-table class="available-table" fxFlex="grow" #table [dataSource]="DataSource" matSort>
+                        <ng-container matColumnDef="Resort">
+                            <mat-header-cell *matHeaderCellDef> Resort </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <!-- <a  style="margin-right:3px;" href="{{element.link}}" ><mat-icon>pageview</mat-icon></a> -->
+                                <a href="{{element.link}}" style="color: blue">{{element.resort}}</a>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Unitsize">
+                            <mat-header-cell *matHeaderCellDef> Unit Size
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <p> {{element.unitSize}}</p>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Region">
+                            <mat-header-cell fxFlex="15" *matHeaderCellDef> Region </mat-header-cell>
+                            <mat-cell fxFlex="15" *matCellDef="let element">
+                                <p> {{element.region}}</p>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Arrival">
+                            <mat-header-cell *matHeaderCellDef> Arrival </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <p> {{element.arrival  | date: 'dd/MM/yy'}}</p>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Nights">
+                            <mat-header-cell fxFlex="9" fxLayoutAlign="center center" *matHeaderCellDef> Nights
+                            </mat-header-cell>
+                            <mat-cell fxFlex="9" fxLayoutAlign="center center" *matCellDef="let element">
+                                <p> {{element.nights}}</p>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Price2Pay">
+                            <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <p> R{{element.price2Pay}}</p>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Actions">
+                            <mat-header-cell *matHeaderCellDef fxLayoutAlign="end center">
+                                Enquiry
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" fxLayoutAlign="end center">
+                                <button matTooltip="Enquire for holiday" *ngIf="testToEnquire(element.id)"
+                                    mat-icon-button color="primary" (click)="info(element.id)">
+                                    <mat-icon aria-label="">mail</mat-icon>
+                                </button>
+                                <p *ngIf="element.sold" style="color: red; Margin: 5px"><b>SOLD</b></p>
+                                <p *ngIf='element.hold' style="color: orange; Margin: 5px"><b>HOLD</b></p>
+                            </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                    <div fxFlex="grow">
+                        <mat-paginator #paginator [pageSize]="50" [pageSizeOptions]="[50, 100, 150]"
+                            [showFirstLastButtons]="true">
+                        </mat-paginator>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+    </div>
+</section>
+
+<section #Join id="JoinSection">
+
+    <h1 fxLayoutAlign="center center">Be the First to know</h1>
+    <div style="text-align: center">
+        <p style="text-align: center">Get our lowest price deal before everyone else. Become part of our VIP database,
+            register with your email address Now!</p>
+        <input matinput placeholder="Your Email" [(ngModel)]="SubmitEmailValue" style="margin-left: 5px" type="email">
+        <button color="primary" style="margin: 5px" (click)="submitEmail()" mat-raised-button>Submit</button>
+    </div>
+
+</section>
+
+<footer id="ContactSection" #ContactSection class="ftco-footer ftco-bg-dark ftco-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">Contact us</h2>
+                    <div class="block-23 mb-3">
+                        <ul>
+
+                            <li><a href="tel:012-755-7555"><span class="icon icon-phone"></span><span
+                                        class="text">(+27)12-755-7555</span></a></li>
+                            <li><a href="mailto:info@holidaybooker.co.za"><span class="icon icon-envelope"></span><span
+                                        class="text">info@holidaybooker.co.za</span></a></li>
+                            <li><a href="https://www.facebook.com/holidaybooker.co.za/"><span
+                                        class="icon icon-facebook"></span><span class="text">Why not visit our
+                                        Facebook!</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+
+                <p>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;
+                    2019 All rights reserved
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,56 @@
+<div fxFlex="100" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+        <h2>View Stock</h2>
+        <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="start center">
+
+            <mat-form-field fxFlex.lt-md="100" fxFlexOffset="3">
+                    <mat-label>Provider(s)</mat-label>
+                    <mat-select  multiple>
+                      <mat-option *ngFor="let entity of providerList" [value]="entity">{{entity}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                    <mat-label>Resort</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let entity of resorts" [value]="entity.value">
+                        {{entity.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                    <mat-label>Unit Size</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let entity of unitSize" [value]="entity.value">
+                        {{entity.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                    <input matInput name="datePickerArrival" [matDatepicker]="picker" placeholder="Arrival">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                <input type="number" name="txbNights" placeholder="Nights" aria-label="Number" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                <input type="number" name="txbBuyingPrice" placeholder="Buying Price" aria-label="Number" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                <input type="number" name="txbPrice2pay" placeholder="Price 2 Pay" aria-label="Number" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlexOffset="3" fxFlex.lt-md="100">
+                <input type="number" name="txbAdminFee" placeholder="Admin Fee" value="99" aria-label="Number" matInput>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row wrap" fxFlex="100" fxLayoutGap="5px" fxLayoutAlign="end center">
+            <button type="button" style="margin-left: 25px; margin-bottom: 15px" matTooltip="New Resort"
+                (click)=edit() mat-raised-button color="primary">
+                Save Stock
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>

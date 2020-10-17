@@ -1,0 +1,33 @@
+
+$cardMargin: 24px;
+
+.login-container {
+    height:60vh;
+}
+
+.logo{
+    width: 470px;
+}
+
+app-card {
+    width: 450px;
+
+    .logo {
+        margin: $cardMargin 0;
+    }
+
+    .btn-sign-in {
+        margin-top: 5px;
+    }
+
+    hr {
+        border: 0;
+        border-top: 1px solid #ECEFF1;
+        margin: ($cardMargin / 2) -8px;
+    }
+
+    .forgot-password {
+        font-size: $cardMargin / 2;
+        margin-top: 5px;
+    }
+}

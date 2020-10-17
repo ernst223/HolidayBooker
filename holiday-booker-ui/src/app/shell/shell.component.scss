@@ -1,0 +1,42 @@
+@import 'src/theme';
+
+.sidenav-container {
+  height: 100vh;
+  user-select: none;
+  
+  .sidenav {
+    width: 250px;
+    left: 0;
+
+    .logo{
+      padding: 5px;
+    }
+  }
+  
+  .main-toolbar {
+    background-color: mat-contrast($ecp-app-primary, A100);
+    color: mat-contrast($ecp-app-primary, 900);
+
+      position: fixed;
+      top: 0;
+      z-index: 3000;
+
+    
+    .user-details {
+      .username,
+      .group-name {
+        margin: 0;
+      }
+    }
+
+    
+    .group-name {
+      font-size: 0.9rem;
+      line-height: 0.9rem;
+    }
+  }
+}
+
+.offset-signout{
+  margin-right: 250px;
+}

@@ -1,0 +1,35 @@
+<div class="login-container" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card>
+      <div class="logo" fxLayout="row" fxLayoutAlign="center center">
+          <img fxFlex="70" src="../../assets/newLogo.jpg">
+      </div>
+
+      <form fxLayout="row wrap" fxLayoutAlign="center center" novalidate [formGroup]="loginForm" (ngSubmit)="login()">
+          <mat-form-field fxFlex="80">
+              <input matInput
+                     formControlName="username"
+                     type="text"
+                     placeholder="Username">
+              <mat-error  *ngIf="loginForm.controls['username'].invalid">Your username is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="80">
+              <input matInput
+                     formControlName="password"
+                     type="password"
+                     placeholder="Password">
+              <mat-error  *ngIf="loginForm.controls['password'].invalid">Your password is required</mat-error>
+          </mat-form-field>
+
+          <button class="btn-sign-in"
+                  mat-raised-button
+                  fxFlex="25"
+                  color="warning"
+                  [disabled]="loginForm.invalid">
+              SIGN IN
+          </button>
+          <mat-progress-spinner style="min-width: 10px" [diameter]="40" mode="indeterminate" *ngIf="isLoading"></mat-progress-spinner>
+      </form>
+
+  </mat-card>
+</div>

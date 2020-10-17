@@ -1,0 +1,40 @@
+@import 'src/theme';
+$text-color: mat-contrast($ecp-app-primary, A100);
+$menu-highlight-color: #eceff1;
+
+
+.menu-item-wrap {
+    display: block;
+}
+
+.menu-item-title {
+    display: block;
+    font-size: 0.9rem;
+    color: $text-color;
+    margin-left: 1em;
+    font-size: 15px;
+    margin-top: 3px;
+}
+
+.menu-item-icon {
+    color: $text-color;
+}
+
+.menu-item-description {
+    display: block;
+    font-size: 0.75rem;
+    color: $text-color;
+}
+
+.menu-item-active {
+    background-color: $menu-highlight-color;
+}
+
+.menu-item-child-title{
+    margin-left: 15% !important;
+    font-size: smaller;
+}
+
+.menu-child-item{
+    
+}

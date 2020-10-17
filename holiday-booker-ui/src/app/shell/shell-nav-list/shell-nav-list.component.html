@@ -1,0 +1,50 @@
+<mat-nav-list>
+
+    <div class="menu-items-container" fxLayout="row wrap">
+      <ng-container *ngFor="let menuItem of menuItems">
+  
+        <!-- Single-level menu items -->
+        <ng-container *ngIf="menuItem.children === undefined && menuItem.route !== undefined">
+          <mat-list-item fxFlex="grow" routerLink="{{menuItem.route}}" routerLinkActive="menu-item-active">
+            <div class="menu-item-wrap">
+              <mat-icon fxFlex="nogrow" class="menu-item-icon">
+                {{menuItem.icon}}
+              </mat-icon>
+              <a class="menu-item-title">
+                {{menuItem.title}}
+              </a>
+            </div>
+          </mat-list-item>
+        </ng-container>
+  
+        <!-- Menu items with children -->
+        <ng-container *ngIf="menuItem.children?.length > 0">
+  
+          <mat-list-item fxFlex="grow" routerLinkActive="menu-item-active" (click)="toggleActive(menuItem)">
+              <mat-icon fxFlex="nogrow" class="menu-item-icon">
+                  {{menuItem.icon}}
+                </mat-icon>
+            <a fxFlex="grow" class="menu-item-title">
+              {{menuItem.title}}
+            </a>
+            <mat-icon fxFlex="nogrow" class="menu-item-icon" [@parentActive]="isParentActive(menuItem)">
+              expand_more
+            </mat-icon>
+          </mat-list-item>
+  
+          <mat-list-item class="menu-child-item" *ngFor="let child of menuItem.children" fxFlex="grow" routerLink="{{child.route}}"
+            routerLinkActive="menu-item-active" [routerLinkActiveOptions]="{exact: true}" [@childrenActive]="isParentActive(menuItem)">
+            <a fxFlex="grow" fxFlexOffset="5" >
+              {{child.title}}
+            </a>
+            <mat-icon fxFlex="nogrow" class="menu-item-icon">
+              {{child.icon}}
+            </mat-icon>
+          </mat-list-item>
+  
+        </ng-container>
+  
+      </ng-container>
+    </div>
+  
+  </mat-nav-list>

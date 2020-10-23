@@ -26,7 +26,7 @@ namespace Vacation_Booker.Repository
                 var supplier = dc.Suppliers.Where(o => o.Id == stock.SupplierId).FirstOrDefault();
                 var unitSize = dc.UnitSizes.Where(o => o.Id == stock.UnitSizeId).FirstOrDefault();
                 EmailToAdminAsync(T, stock, resort, supplier, unitSize);
-                EmailToProviderAsync(T, stock, resort, supplier, unitSize);
+                //EmailToProviderAsync(T, stock, resort, supplier, unitSize);
                 EmailToClientAsync(T, stock, resort, supplier, unitSize);
                 return true;
             }
@@ -138,7 +138,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)
@@ -198,7 +198,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)
@@ -229,7 +229,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)
@@ -248,14 +248,14 @@ namespace Vacation_Booker.Repository
             {
                 To = T.Email,
                 From = EmailFrom,
-                TemplateId = 13352618,
+                TemplateId = 20752183,
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "name", T.Name },
-                    { "resortName" , resort.Description},
+                    { "resort" , resort.Description},
                     { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
                     { "nights" , stock.Nights},
-                    {  "unitSize", unitSize.Description},
+                    {  "unitsize", unitSize.Description},
                     { "priceToPay", stock.Price2Pay },
                     { "link", resort.Link },
                     { "adults", T.Adults },
@@ -264,7 +264,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)
@@ -295,7 +295,7 @@ namespace Vacation_Booker.Repository
                 //To = "elke@holidaybooker.co.za",
                 To = "info@holidaybooker.co.za",
                 From = EmailFrom,
-                TemplateId = 13353101,
+                TemplateId = 20661200,
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "name", T.Name },
@@ -314,7 +314,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)
@@ -342,7 +342,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)

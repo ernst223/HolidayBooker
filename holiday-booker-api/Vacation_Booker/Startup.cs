@@ -47,13 +47,13 @@ namespace Vacation_Booker
             //services.AddCors();
 
             //connectionstring*********************************************************
-             //var connectionstring = "Data Source=DESKTOP-J8HH820\\SQLEXPRESS;Initial Catalog=vacationDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            // var connectionstring = "Data Source=DESKTOP-J8HH820\\SQLEXPRESS;Initial Catalog=vacationDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
             // Server DB
-            var connectionstring = "Server=localhost\\SQLEXPRESS,1434; Database=vacationDB;Trusted_Connection=True;";
+            //var connectionstring = "Server=localhost\\SQLEXPRESS,1434; Database=vacationDB;Trusted_Connection=True;";
 
 
-            //var connectionstring = "Server=localhost\\SQLEXPRESS;Database=vacationDB;Trusted_Connection=True;";
+            var connectionstring = "Server=localhost\\SQLEXPRESS;Database=vacationDB;Trusted_Connection=True;";
                       //connectionstring*********************************************************
 
                      services.AddDbContext<MyContext>(o => o.UseSqlServer(connectionstring));

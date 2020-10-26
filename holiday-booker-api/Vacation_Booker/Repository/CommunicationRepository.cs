@@ -89,7 +89,7 @@ namespace Vacation_Booker.Repository
             {
                 To = EmailFrom,
                 From = EmailFrom,
-                TemplateId = 13593403,
+                TemplateId = 20755695,
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "email", email }
@@ -119,7 +119,7 @@ namespace Vacation_Booker.Repository
             {
                 To = email,
                 From = EmailFrom,
-                TemplateId = 13370996,
+                TemplateAlias = "invoice",
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "name", name },
@@ -144,10 +144,12 @@ namespace Vacation_Booker.Repository
             if (sendResult.Status == PostmarkStatus.Success)
             {
                 Console.WriteLine(sendResult.Status);
+                throw new Exception("Email Status: " + sendResult.Status);
             }
             else
             {
                 Console.WriteLine(sendResult.Status);
+                throw new Exception("Email Status: " + sendResult.Status);
             }
         }
         public string addInvoice(int stockId)
@@ -173,8 +175,8 @@ namespace Vacation_Booker.Repository
                     InvoiceNumber = "ER" + Convert.ToString(onlyNumber + 1)
                 });
                 dc.SaveChanges();
-                NewInvoiceGenerated("ER" + Convert.ToString(onlyNumber + 1), stockId);
-                return "ER" + Convert.ToString(onlyNumber + 1);
+                NewInvoiceGenerated("ER" + Convert.ToString(onlyNumber + 41), stockId);
+                return "ER" + Convert.ToString(onlyNumber + 41);
             }
         }
         public async Task SendNotificationAsync(int Id, string email, string name, string lastname)
@@ -187,7 +189,7 @@ namespace Vacation_Booker.Repository
             {
                 To = email,
                 From = EmailFrom,
-                TemplateId = 13371666,
+                TemplateId = 20796123,
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "name", name },

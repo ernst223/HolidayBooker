@@ -121,6 +121,8 @@ info(id: any) {
 });
 // tslint:disable-next-line: align
 dialogRef.afterClosed().subscribe(() => {
+  // Going to about page
+  this.router.navigate(['/about']);
  });
 }
 

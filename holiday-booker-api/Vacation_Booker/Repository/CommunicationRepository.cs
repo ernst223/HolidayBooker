@@ -89,7 +89,7 @@ namespace Vacation_Booker.Repository
             {
                 To = EmailFrom,
                 From = EmailFrom,
-                TemplateId = 20755695,
+                TemplateAlias = "newEmail",
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "email", email }
@@ -139,17 +139,18 @@ namespace Vacation_Booker.Repository
             };
 
             var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
-            var sendResult = await client.SendMessageAsync(message);
 
-            if (sendResult.Status == PostmarkStatus.Success)
+            var response = await client.SendMessageAsync(message);
+
+            if (response.Status == PostmarkStatus.Success)
             {
-                Console.WriteLine(sendResult.Status);
-                throw new Exception("Email Status: " + sendResult.Status);
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
             }
             else
             {
-                Console.WriteLine(sendResult.Status);
-                throw new Exception("Email Status: " + sendResult.Status);
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
             }
         }
         public string addInvoice(int stockId)
@@ -189,7 +190,7 @@ namespace Vacation_Booker.Repository
             {
                 To = email,
                 From = EmailFrom,
-                TemplateId = 20796123,
+                TemplateAlias = "notify",
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "name", name },
@@ -201,15 +202,18 @@ namespace Vacation_Booker.Repository
             };
 
             var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
-            var sendResult = await client.SendMessageAsync(message);
 
-            if (sendResult.Status == PostmarkStatus.Success)
+            var response = await client.SendMessageAsync(message);
+
+            if (response.Status == PostmarkStatus.Success)
             {
-                Console.WriteLine(sendResult.Status);
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
             }
             else
             {
-                Console.WriteLine(sendResult.Status);
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
             }
         }
         public async Task EmailToProviderAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
@@ -280,21 +284,9 @@ namespace Vacation_Booker.Repository
         }
         public async Task EmailToAdminAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
         {
-            //var temp = dc.Invoices.Where(o => o.StockId == stock.Id).FirstOrDefault();
-            //string invoiceNumber = "";
-            //if (temp == null)
-            //{
-            //    invoiceNumber = "System Lost invoice Number. (Stock Id = " + Convert.ToString(stock.Id) + ")";
-            //}
-            //else
-            //{
-            //    invoiceNumber = temp.InvoiceNumber;
-            //}
-             
             var message = new TemplatedPostmarkMessage
             {
-               // To = "ernst.blignaut0@gmail.com",
-                //To = "elke@holidaybooker.co.za",
+                //To = "ernst.blignaut0@gmail.com",
                 To = "info@holidaybooker.co.za",
                 From = EmailFrom,
                 TemplateId = 20661200,
@@ -336,7 +328,7 @@ namespace Vacation_Booker.Repository
             {
                 To = "info@holidaybooker.co.za",
                 From = EmailFrom,
-                TemplateId = 16198462,
+                TemplateAlias = "newInvoice",
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "invoiceNum", invoiceNum },

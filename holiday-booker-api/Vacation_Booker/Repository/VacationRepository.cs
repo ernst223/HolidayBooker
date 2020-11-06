@@ -345,6 +345,16 @@ namespace Vacation_Booker.Repository
                 }
             
         }
+        public bool DeleteVacationdeleteVacationByProviderId(int id)
+        {
+            var entries = dc.Vacations.Where(o => o.SupplierId == id).ToList();
+            foreach(var entity in entries)
+            {
+                dc.Vacations.Remove(entity);
+            }
+            dc.SaveChanges();
+            return true;
+        }
         public bool DeleteVacation(int id)
         {
                 try
@@ -468,7 +478,8 @@ namespace Vacation_Booker.Repository
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
                     tempVacation.Arrival = Convert.ToDateTime(entry[3]);
-                    tempVacation.Nights = 7;
+                    //tempVacation.Nights = 7;
+                    tempVacation.Nights = Convert.ToInt32(entry[13]);
                     tempVacation.Price2Pay = Convert.ToInt32(entry[10]);
                     tempVacation.BuyingPrice = CalculateBuyingPriceFW(Convert.ToDouble(entry[7]));
                     tempVacation.AdminFee = adminFee;
@@ -485,7 +496,8 @@ namespace Vacation_Booker.Repository
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
                     tempVacation.Arrival = Convert.ToDateTime(entry[3]);
-                    tempVacation.Nights = 3;
+                    //tempVacation.Nights = 3;
+                    tempVacation.Nights = Convert.ToInt32(entry[14]);
                     tempVacation.Price2Pay = Convert.ToInt32(entry[11]);
                     tempVacation.BuyingPrice = CalculateBuyingPriceWE(Convert.ToDouble(entry[8]));
                     tempVacation.AdminFee = adminFee;
@@ -502,7 +514,8 @@ namespace Vacation_Booker.Repository
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
                     tempVacation.Arrival = Convert.ToDateTime(entry[3]).AddDays(3);
-                    tempVacation.Nights = 5;
+                    //tempVacation.Nights = 5;
+                    tempVacation.Nights = Convert.ToInt32(entry[15]);
                     tempVacation.Price2Pay = Convert.ToInt32(entry[12]);
                     tempVacation.BuyingPrice = CalculateBuyingPriceMW(Convert.ToDouble(entry[9]));
                     tempVacation.AdminFee = adminFee;

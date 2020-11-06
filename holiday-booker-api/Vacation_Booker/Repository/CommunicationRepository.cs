@@ -129,6 +129,7 @@ namespace Vacation_Booker.Repository
                     { "kids" , kids },
                     { "adults", adults},
                     { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
+                    { "ddate", stock.Arrival.Date.AddDays(stock.Nights).ToString("dd/MM/yyyy")},
                     { "resort" , resort.Description},
                     {  "unitSize", unitSize.Description},
                     { "stockId", addInvoice(stock.Id) },

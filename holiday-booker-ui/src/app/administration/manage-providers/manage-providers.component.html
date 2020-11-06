@@ -92,6 +92,10 @@
                     <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
 
 
+                        <button matTooltip="Delete All Providers Stock" *ngIf="!testEditabliity(element.id)" mat-icon-button color="warn"
+                            (click)="deleteProviderStock(element.id)">
+                            <mat-icon aria-label="">delete_sweep</mat-icon>
+                        </button>
                         <button matTooltip="Edit" *ngIf="!testEditabliity(element.id)" mat-icon-button color="primary"
                          (click)="edit(element.id,element.code,element.description, element.email, element.contact )">
                             <mat-icon aria-label="">edit</mat-icon>
@@ -100,6 +104,7 @@
                             (click)="delete(element.id)">
                             <mat-icon aria-label="">delete</mat-icon>
                         </button>
+                        
 
                         <button matTooltip="Save" *ngIf="testEditabliity(element.id)" mat-icon-button color="primary"
                         (click)=SaveEdit(element.id)>

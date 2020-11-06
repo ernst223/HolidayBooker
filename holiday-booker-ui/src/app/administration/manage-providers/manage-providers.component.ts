@@ -80,6 +80,12 @@ export class ManageProvidersComponent implements OnInit {
       this.openSnackBar('Deleted', '');
     });
   }
+  deleteProviderStock(id: any) {
+    this.service.deleteSuppliersStock(id).subscribe(a => {
+      console.log('Stock Deleted');
+      this.openSnackBar('Success Stock Deleted', '');
+    })
+  }
   add() {
     const data: Supplier = {
       Id: 0,

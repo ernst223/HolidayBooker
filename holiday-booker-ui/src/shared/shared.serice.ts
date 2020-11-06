@@ -103,6 +103,11 @@ export class SharedService {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
+  public deleteSuppliersStock(id: any): any {
+    return this.httpClient.delete(this.connectionstring + 'api/vacation/deletebyproviderid/' + `${id}`, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
   public addSupplier(T: Supplier): any {
     return this.httpClient.post(this.connectionstring + 'api/supplier/add', T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)

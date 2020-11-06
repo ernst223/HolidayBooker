@@ -84,6 +84,13 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
+        [HttpDelete("vacation/deletebyproviderid/{id}")]
+        public IActionResult deleteVacationByProviderId(int id)
+        {
+            return Ok(vacationRepository.DeleteVacationdeleteVacationByProviderId(id));
+        }
+
+        [Authorize]
         [HttpPost("vacation/add")]
         public IActionResult addVacation([FromBody] Vacation T)
         {

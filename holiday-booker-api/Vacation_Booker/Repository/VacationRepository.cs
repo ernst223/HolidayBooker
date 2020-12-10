@@ -501,7 +501,7 @@ namespace Vacation_Booker.Repository
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
                     tempVacation.Arrival = Convert.ToDateTime(entry[5]);
-                    tempVacation.Nights = (Convert.ToDateTime(entry[5]) - Convert.ToDateTime(entry[6])).Days;
+                    tempVacation.Nights = (Convert.ToDateTime(entry[6]) - Convert.ToDateTime(entry[5])).Days;
                     tempVacation.Price2Pay = Convert.ToInt32(entry[14]);
                     tempVacation.BuyingPrice = CalculateBuyingPriceFW(Convert.ToDouble(entry[10]));
                     tempVacation.AdminFee = adminFee;

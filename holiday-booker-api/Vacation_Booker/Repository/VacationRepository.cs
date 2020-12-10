@@ -371,9 +371,10 @@ namespace Vacation_Booker.Repository
             
         }
 
+        private List<string> errorLines;
         public List<string> uploadVactionCSV(IFormFile theFile, string supplierName, int adminFee) 
         {
-            List<string> result = new List<string>();
+            errorLines = new List<string>();
             int LineCount = 0;
             int commaCount = 0;
             int commaPointCount = 0;
@@ -381,6 +382,13 @@ namespace Vacation_Booker.Repository
             List<Vacation> vacationsToBeAdded = new List<Vacation>();
             string line;
             string[] values;
+
+            if(GetSupplierFromString(supplierName) == null)
+            {
+                errorLines.Add("Supplier name are spelled incorrectly");
+                return errorLines;
+            }
+
             using (var ms = new MemoryStream())
             {
                 theFile.CopyTo(ms);
@@ -403,12 +411,8 @@ namespace Vacation_Booker.Repository
                             {
                                 values = line.Split(';');
                             }
-                            tempEntries = getProcessedEntry(values, supplierName, adminFee);
-                            if (tempEntries == null)
-                            {
-                                result.Add(getFailedEntry(values, LineCount));
-                            }
-                            else
+                            tempEntries = getProcessedEntry(values, supplierName, adminFee, LineCount);
+                            if (tempEntries != null)
                             {
                                 foreach (var entity in tempEntries)
                                 {
@@ -420,30 +424,38 @@ namespace Vacation_Booker.Repository
                             }
                         }
                     }
-                    if(vacationsToBeAdded.Count > 0)
+                    // Only insert if there are no errors
+                    if(errorLines.Count == 0)
                     {
-                        foreach (var entity in vacationsToBeAdded)
+                        if (vacationsToBeAdded.Count > 0)
                         {
-                            entity.Id = 0;
-                            dc.Vacations.Add(new Vacation() 
-                            { 
-                                AdminFee = entity.AdminFee,
-                                Arrival = entity.Arrival,
-                                BuyingPrice = entity.BuyingPrice,
-                                Hold = entity.Hold,
-                                Nights = entity.Nights,
-                                Price2Pay = entity.Price2Pay,
-                                ResortId = entity.ResortId,
-                                Sold = entity.Sold,
-                                SupplierId = entity.SupplierId,
-                                UnitSizeId = entity.UnitSizeId
-                            });
+                            foreach (var entity in vacationsToBeAdded)
+                            {
+                                entity.Id = 0;
+                                dc.Vacations.Add(new Vacation()
+                                {
+                                    AdminFee = entity.AdminFee,
+                                    Arrival = entity.Arrival,
+                                    BuyingPrice = entity.BuyingPrice,
+                                    Hold = entity.Hold,
+                                    Nights = entity.Nights,
+                                    Price2Pay = entity.Price2Pay,
+                                    ResortId = entity.ResortId,
+                                    Sold = entity.Sold,
+                                    SupplierId = entity.SupplierId,
+                                    UnitSizeId = entity.UnitSizeId
+                                });
+                            }
+                            dc.SaveChanges();
                         }
-                        dc.SaveChanges();
                     }
                 }
             }
-            return result;
+            if(errorLines.Count == 0)
+            {
+                errorLines.Add("Upload Success!!.");
+            }
+            return errorLines;
         }
         public bool isDuplicate(Vacation vacation)
         {
@@ -457,31 +469,41 @@ namespace Vacation_Booker.Repository
                 return true;
             }
         }
-        public List<Vacation> getProcessedEntry(string[] entry, string supplierName, int adminFee)
+        
+        public List<Vacation> getProcessedEntry(string[] entry, string supplierName, int adminFee, int lineCount)
         {
+            // Build Error Message here
             List<Vacation> result = new List<Vacation>();
             Vacation tempVacation;
             Resort tempResort = getResortFromString(entry[2]);
-            UnitSizes tempUnitSizes = getUnitSizesFromString(entry[6]);
+            UnitSizes tempUnitSizes = getUnitSizesFromString(entry[8]);
             Supplier tempSupplier = GetSupplierFromString(supplierName);
-            if(tempResort == null || tempUnitSizes == null || tempSupplier == null)
+            if(tempResort == null)
+            {
+                errorLines.Add("At row " + Convert.ToString(lineCount) + " Resort name have a spelling mistake.");
+            }
+            if (tempUnitSizes == null)
+            {
+                errorLines.Add("At row " + Convert.ToString(lineCount) + " Unit Size name have a spelling mistake.");
+            }
+
+            if (tempResort == null || tempUnitSizes == null || tempSupplier == null)
             {
                 return null;
             }
             try
             {
                 // Full week
-                if(Convert.ToInt32(entry[7]) != 0)
+                if(Convert.ToInt32(entry[10]) != 0)
                 {
                     tempVacation = new Vacation();
                     tempVacation.ResortId = tempResort.Id;
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
-                    tempVacation.Arrival = Convert.ToDateTime(entry[3]);
-                    //tempVacation.Nights = 7;
-                    tempVacation.Nights = Convert.ToInt32(entry[13]);
-                    tempVacation.Price2Pay = Convert.ToInt32(entry[10]);
-                    tempVacation.BuyingPrice = CalculateBuyingPriceFW(Convert.ToDouble(entry[7]));
+                    tempVacation.Arrival = Convert.ToDateTime(entry[5]);
+                    tempVacation.Nights = (Convert.ToDateTime(entry[5]) - Convert.ToDateTime(entry[6])).Days;
+                    tempVacation.Price2Pay = Convert.ToInt32(entry[14]);
+                    tempVacation.BuyingPrice = CalculateBuyingPriceFW(Convert.ToDouble(entry[10]));
                     tempVacation.AdminFee = adminFee;
                     tempVacation.Sold = false;
                     tempVacation.Hold = false;
@@ -489,17 +511,16 @@ namespace Vacation_Booker.Repository
                 }
 
                 // Weekend
-                if (Convert.ToInt32(entry[8]) != 0)
+                if (Convert.ToInt32(entry[11]) != 0)
                 {
                     tempVacation = new Vacation();
                     tempVacation.ResortId = tempResort.Id;
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
-                    tempVacation.Arrival = Convert.ToDateTime(entry[3]);
-                    //tempVacation.Nights = 3;
-                    tempVacation.Nights = Convert.ToInt32(entry[14]);
-                    tempVacation.Price2Pay = Convert.ToInt32(entry[11]);
-                    tempVacation.BuyingPrice = CalculateBuyingPriceWE(Convert.ToDouble(entry[8]));
+                    tempVacation.Arrival = getArrivalDateWeekend(entry[5]);
+                    tempVacation.Nights = 3;
+                    tempVacation.Price2Pay = Convert.ToInt32(entry[15]);
+                    tempVacation.BuyingPrice = CalculateBuyingPriceWE(Convert.ToDouble(entry[11]));
                     tempVacation.AdminFee = adminFee;
                     tempVacation.Sold = false;
                     tempVacation.Hold = false;
@@ -507,17 +528,16 @@ namespace Vacation_Booker.Repository
                 }
 
                 // Mid Week
-                if (Convert.ToInt32(entry[9]) != 0)
+                if (Convert.ToInt32(entry[12]) != 0)
                 {
                     tempVacation = new Vacation();
                     tempVacation.ResortId = tempResort.Id;
                     tempVacation.UnitSizeId = tempUnitSizes.Id;
                     tempVacation.SupplierId = tempSupplier.Id;
-                    tempVacation.Arrival = Convert.ToDateTime(entry[3]).AddDays(3);
-                    //tempVacation.Nights = 5;
-                    tempVacation.Nights = Convert.ToInt32(entry[15]);
-                    tempVacation.Price2Pay = Convert.ToInt32(entry[12]);
-                    tempVacation.BuyingPrice = CalculateBuyingPriceMW(Convert.ToDouble(entry[9]));
+                    tempVacation.Arrival = getArrivalDateMidWeek(entry[5]);
+                    tempVacation.Nights = 5;
+                    tempVacation.Price2Pay = Convert.ToInt32(entry[16]);
+                    tempVacation.BuyingPrice = CalculateBuyingPriceMW(Convert.ToDouble(entry[12]));
                     tempVacation.AdminFee = adminFee;
                     tempVacation.Sold = false;
                     tempVacation.Hold = false;
@@ -531,8 +551,53 @@ namespace Vacation_Booker.Repository
             }
             catch(Exception e)
             {
+                errorLines.Add("At row " + Convert.ToString(lineCount) + " there is a unknown ERROR, please check each column in that row.");
                 return null;
             }
+        }
+        public DateTime getArrivalDateWeekend(string date)
+        {
+            DateTime firstDate = Convert.ToDateTime(date);
+            string firstDateName = firstDate.ToString("dddd");
+            List<string> dateNameList = new List<string>();
+            for (int i = 1; i <= 7; i++)
+            {
+                dateNameList.Add(firstDate.AddDays(i).ToString("dddd"));
+            }
+
+            foreach(var entity in dateNameList)
+            {
+                if(entity == firstDateName)
+                {
+                    if(entity == "Monday")
+                    {
+                        return firstDate.AddDays(4);
+                    }
+                }
+            }
+            return firstDate;
+        }
+        public DateTime getArrivalDateMidWeek(string date)
+        {
+            DateTime firstDate = Convert.ToDateTime(date);
+            string firstDateName = firstDate.ToString("dddd");
+            List<string> dateNameList = new List<string>();
+            for (int i = 1; i <= 7; i++)
+            {
+                dateNameList.Add(firstDate.AddDays(i).ToString("dddd"));
+            }
+
+            foreach (var entity in dateNameList)
+            {
+                if (entity == firstDateName)
+                {
+                    if (entity == "Friday")
+                    {
+                        return firstDate.AddDays(3);
+                    }
+                }
+            }
+            return firstDate;
         }
         public int CalculateBuyingPriceFW(double points)
         {

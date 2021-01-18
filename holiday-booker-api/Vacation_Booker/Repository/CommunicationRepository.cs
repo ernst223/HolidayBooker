@@ -96,7 +96,7 @@ namespace Vacation_Booker.Repository
                 }
             };
 
-            var client = new PostmarkClient("8d8e1a07-e84c-409c-ab38-3e0a14b7407f");
+            var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)

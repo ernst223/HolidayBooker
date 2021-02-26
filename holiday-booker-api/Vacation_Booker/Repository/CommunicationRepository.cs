@@ -39,12 +39,12 @@ namespace Vacation_Booker.Repository
         {
             try
             {
-                //Setting the vacations status to On Hold
-                dc.Vacations.Remove(dc.Vacations.Where(o => o.Id == id).First());
-                dc.SaveChanges();
-
                 //Send Email
                 SendNotificationAsync(id, email, name, lastname);
+
+                //Removing Vacation
+                dc.Vacations.Where(o => o.Id == id).First().Sold = true;
+                dc.SaveChanges();
                 return true;
             }
             catch
@@ -191,7 +191,7 @@ namespace Vacation_Booker.Repository
             {
                 To = email,
                 From = EmailFrom,
-                TemplateAlias = "notify",
+                TemplateAlias = "soldOut",
                 TemplateModel = new Dictionary<string, object>
                 {
                     { "name", name },

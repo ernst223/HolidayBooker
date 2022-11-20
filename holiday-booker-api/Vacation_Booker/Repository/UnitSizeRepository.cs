@@ -13,10 +13,11 @@ namespace Vacation_Booker.Repository
         {
             dc = T;
         }
-        public bool AddUnitSize(UnitSizes T)
+        public bool AddUnitSize(UnitSizes T, string userId)
         {
                 try
                 {
+                    T.UserId = userId;
                     dc.UnitSizes.Add(T);
                     dc.SaveChanges();
                     return true;
@@ -42,11 +43,11 @@ namespace Vacation_Booker.Repository
                 }
             
         }
-        public List<UnitSizes> GetUnitSizes()
+        public List<UnitSizes> GetUnitSizes(string userId)
         {
                 try
                 {
-                    return dc.UnitSizes.OrderByDescending(o => o.Id).ToList();
+                    return dc.UnitSizes.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {

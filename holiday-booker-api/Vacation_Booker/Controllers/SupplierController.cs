@@ -20,10 +20,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpGet("supplier")]
-        public IActionResult getSuppliers()
+        [HttpGet("supplierwithuserid/{userId}")]
+        public IActionResult getSuppliers(string userId)
         {
-            return Ok(supplierRepository.GetSuppliers());
+            return Ok(supplierRepository.GetSuppliers(userId));
         }
 
         [Authorize]
@@ -41,10 +41,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("supplier/add")]
-        public IActionResult addSupplier([FromBody] Supplier T)
+        [HttpPost("supplierwithuserid/add/{userId}")]
+        public IActionResult addSupplier([FromBody] Supplier T, string userId)
         {
-            return Ok(supplierRepository.AddSupplier(T));
+            return Ok(supplierRepository.AddSupplier(T, userId));
         }
 
         [Authorize]

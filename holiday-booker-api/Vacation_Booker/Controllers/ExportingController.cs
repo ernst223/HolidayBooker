@@ -21,12 +21,12 @@ namespace Vacation_Booker.Controllers
         }
 
         //[Authorize]
-        [HttpPost("exportToExcel")]
-        public IActionResult ExportToExcel([FromBody] FilterStock T)
+        [HttpPost("exportToExcelwithuserid/{userId}")]
+        public IActionResult ExportToExcel([FromBody] FilterStock T, string userId)
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                var stream = exportRepository.GenerateReport(T);
+                var stream = exportRepository.GenerateReport(T, userId);
                 stream.CopyTo(ms);
                 var file = File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -36,12 +36,12 @@ namespace Vacation_Booker.Controllers
             }
         }
 
-        [HttpPost("exportToExcel64")]
-        public IActionResult ExportToExcel64([FromBody] FilterStock T)
+        [HttpPost("exportToExcel64withuserid/{userId}")]
+        public IActionResult ExportToExcel64([FromBody] FilterStock T, string userId)
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                var stream = exportRepository.GenerateReport(T);
+                var stream = exportRepository.GenerateReport(T, userId);
                 stream.CopyTo(ms);
                 var file = File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 

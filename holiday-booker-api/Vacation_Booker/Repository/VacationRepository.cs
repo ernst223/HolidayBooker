@@ -17,12 +17,51 @@ namespace Vacation_Booker.Repository
         {
             dc = T;
         }
-        public bool AddVacation(Vacation T)
+
+        public List<VacationForDisplayDto> getPartnersStock(string userId)
+        {
+            setParternerDefaultPrices(userId);
+            var partnerId = dc.Users.Where(a => a.Id != userId).FirstOrDefault().Id;
+            return GetVacationDisplay(partnerId);
+        }
+
+        public void setParternerDefaultPrices(string userId)
+        {
+            var stock = dc.Vacations.Where(a => a.UserId != userId && a.PartnersPrice == 0).ToList();
+            if (stock.Count > 0)
+            {
+                var defaultPrice = dc.Users.Where(a => a.Id == userId).FirstOrDefault().DefaultProfitOnStock;
+                foreach (var entry in stock)
+                {
+                    entry.PartnersPrice = defaultPrice + entry.Price2Pay;
+                }
+                dc.SaveChanges();
+            }
+        }
+
+        public bool updateDefaultPartnerPrice(int price, string userId)
+        {
+            var user = dc.Users.Where(a => a.Id == userId).FirstOrDefault();
+            user.DefaultProfitOnStock = price;
+            dc.SaveChanges();
+            return true;
+        }
+
+        public bool updatePartnerStockProfit(int stockId,int price)
+        {
+            var stock = dc.Vacations.Where(a => a.Id == stockId).FirstOrDefault();
+            stock.PartnersPrice = price;
+            dc.SaveChanges();
+            return true;
+        }
+
+        public bool AddVacation(Vacation T, string userId)
         {
                 try
                 {
                 //Need to add one day because for some random reason the arrival date is set to one day back at 22:00
-                T.Arrival = T.Arrival.Date.AddDays(1);
+                    T.Arrival = T.Arrival.Date.AddDays(1);
+                    T.UserId = userId;
                     dc.Vacations.Add(T);
                     dc.SaveChanges();
                     return true;
@@ -34,11 +73,11 @@ namespace Vacation_Booker.Repository
             
         }
 
-        public List<StockWithDetails> getStockWithDetails()
+        public List<StockWithDetails> getStockWithDetails(string userId)
         {
             try
             {
-                var allStock = dc.Vacations.ToList();
+                var allStock = dc.Vacations.Where(a => a.UserId == userId).ToList();
                 List<StockWithDetails> result = new List<StockWithDetails>();
                 foreach (var entity in allStock)
                 {
@@ -98,7 +137,7 @@ namespace Vacation_Booker.Repository
             }
             return result;
         }
-        public bool AddVacationList(List<Vacation> T)
+        public bool AddVacationList(List<Vacation> T, string userId)
         {
             try
             {
@@ -106,6 +145,7 @@ namespace Vacation_Booker.Repository
                 foreach(var entity in T)
                 {
                     entity.Arrival = entity.Arrival.Date.AddDays(1);
+                    entity.UserId = userId;
                     dc.Vacations.Add(entity);
                 }
                 
@@ -180,21 +220,21 @@ namespace Vacation_Booker.Repository
             }
 
         }
-        public List<Vacation> GetVacations()
-        {
+        public List<Vacation> GetVacations(string userId)
+        { 
             CleanVacations();
                 try
                 {
-                    return dc.Vacations.OrderByDescending(o => o.Id).ToList();
+                    return dc.Vacations.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {
                     return null;
                 }
         }
-        public List<VacationForDisplayDto> getFilterByState(int filter)
+        public List<VacationForDisplayDto> getFilterByState(int filter, string userId)
         {
-            var vacationData = dc.Vacations.OrderByDescending(o => o.Id).ToList();
+            var vacationData = dc.Vacations.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
             if(filter == 1)
             {
                 vacationData = vacationData.Where(o => o.Hold == true).ToList();
@@ -220,15 +260,16 @@ namespace Vacation_Booker.Repository
                     Price2Pay = entity.Price2Pay,
                     AdminFee = entity.AdminFee,
                     Sold = entity.Sold,
-                    Hold = entity.Hold
+                    Hold = entity.Hold,
+                    PartnerPrice = entity.PartnersPrice
                 });
             }
 
             return result;
         }
-        public List<VacationForDisplayDto> getFilteredVacation(FilterStock T)
+        public List<VacationForDisplayDto> getFilteredVacation(FilterStock T, string userId)
         {
-            var vacationData = dc.Vacations.OrderByDescending(o => o.Id).ToList();
+            var vacationData = dc.Vacations.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
             if (T.ResortId != 0)
             {
                 vacationData = vacationData.Where(o => o.ResortId == T.ResortId).ToList();
@@ -263,18 +304,19 @@ namespace Vacation_Booker.Repository
                     Price2Pay = entity.Price2Pay,
                     AdminFee = entity.AdminFee,
                     Sold = entity.Sold,
-                    Hold = entity.Hold
+                    Hold = entity.Hold,
+                    PartnerPrice = entity.PartnersPrice
                 });
             }
 
             return result;
         }
 
-        public List<VacationForDisplayDto> GetVacationDisplay()
+        public List<VacationForDisplayDto> GetVacationDisplay(string userId)
         {
             CleanVacations();
             
-                var vacationData = dc.Vacations.ToList();
+                var vacationData = dc.Vacations.Where(a => a.UserId == userId).ToList();
                 List<VacationForDisplayDto> result = new List<VacationForDisplayDto>();
                 foreach(var entity in vacationData)
                 {
@@ -294,12 +336,18 @@ namespace Vacation_Booker.Repository
                         Price2Pay = entity.Price2Pay,
                         AdminFee = entity.AdminFee,
                         Sold = entity.Sold,
-                        Hold = entity.Hold
+                        Hold = entity.Hold,
+                        PartnerPrice = entity.PartnersPrice
                     });
                 }
                 result = result.OrderByDescending(o => o.Id).ToList();
                 return result.OrderByDescending(o => o.Id).ToList();
             
+        }
+
+        public int getUserDefaultProfit(string userId)
+        {
+            return dc.Users.Where(a => a.Id == userId).FirstOrDefault().DefaultProfitOnStock;
         }
         public void CleanVacations()
         {
@@ -345,6 +393,7 @@ namespace Vacation_Booker.Repository
                 }
             
         }
+
         public bool DeleteVacationdeleteVacationByProviderId(int id)
         {
             var entries = dc.Vacations.Where(o => o.SupplierId == id).ToList();
@@ -372,7 +421,7 @@ namespace Vacation_Booker.Repository
         }
 
         private List<string> errorLines;
-        public List<string> uploadVactionCSV(IFormFile theFile, string supplierName, int adminFee) 
+        public List<string> uploadVactionCSV(IFormFile theFile, string supplierName, int adminFee, string userId) 
         {
             errorLines = new List<string>();
             int LineCount = 0;
@@ -443,7 +492,8 @@ namespace Vacation_Booker.Repository
                                     ResortId = entity.ResortId,
                                     Sold = entity.Sold,
                                     SupplierId = entity.SupplierId,
-                                    UnitSizeId = entity.UnitSizeId
+                                    UnitSizeId = entity.UnitSizeId,
+                                    UserId = userId
                                 });
                             }
                             dc.SaveChanges();

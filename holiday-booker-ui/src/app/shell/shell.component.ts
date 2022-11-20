@@ -6,6 +6,7 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatSidenav } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shell',
@@ -23,14 +24,15 @@ export class ShellComponent implements OnInit {
   .pipe(
     map(result => result.matches)
   );
-  constructor(private menuService: MenuService,  private breakpointObserver: BreakpointObserver) { }
+  constructor(private menuService: MenuService,  private breakpointObserver: BreakpointObserver, private router: Router) { }
 
   ngOnInit() {
     this.menuItems = this.menuService.getMenuItems();
   }
 
   signOut() {
-  
+    this.router.navigate(['']);
+    localStorage.clear();
   }
 
   onClick() {

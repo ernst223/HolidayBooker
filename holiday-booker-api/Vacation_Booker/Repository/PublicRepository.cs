@@ -22,7 +22,7 @@ namespace Vacation_Booker.Repository
 
             try
             {
-                var vacationData = dc.Vacations.Take(100).ToList();
+                var vacationData = dc.Vacations.Where(a => a.UserId == "75c81754-5a66-45f9-8b05-060bf16434b9").Take(100).ToList();
                 List<PublicModelDto> data = new List<PublicModelDto>();
                 Resort theResort;
                 Area theArea;
@@ -79,7 +79,7 @@ namespace Vacation_Booker.Repository
         {
             try
             {
-                var vacationData = dc.Vacations.ToList();
+                var vacationData = dc.Vacations.Where(a => a.UserId == "75c81754-5a66-45f9-8b05-060bf16434b9").ToList();
                 List<PublicModelDto> data = new List<PublicModelDto>();
                 Resort theResort;
                 Area theArea;
@@ -178,7 +178,7 @@ namespace Vacation_Booker.Repository
 
             try
             {
-                var vacationData = dc.Vacations.Where(o => o.Sold == false).ToList();
+                var vacationData = dc.Vacations.Where(o => o.Sold == false && o.UserId == "75c81754-5a66-45f9-8b05-060bf16434b9").ToList();
                 List<PublicModelDto> data = new List<PublicModelDto>();
                 Resort theResort;
                 Area theArea;

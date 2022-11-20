@@ -118,10 +118,11 @@ namespace Vacation_Booker.Repository
             }
         }
 
-        public bool addResort(Resort T)
+        public bool addResort(Resort T, string userId)
         {
                 try
                 {
+                    T.UserId = userId;
                     dc.Resorts.Add(T);
                     dc.SaveChanges();
                     return true;
@@ -131,22 +132,22 @@ namespace Vacation_Booker.Repository
                     return false;
                 }
         }
-        public Resort lastResort()
+        public Resort lastResort(string userId)
         {
             try
             {
-                return dc.Resorts.LastOrDefault();
+                return dc.Resorts.Where(a => a.UserId == userId).LastOrDefault();
             }
             catch
             {
                 return null;
             }
         }
-        public List<ResortWithRegionDto> GetResortWithRegion()
+        public List<ResortWithRegionDto> GetResortWithRegion(string userId)
         {
             try
             {
-                var data = dc.Resorts.ToList();
+                var data = dc.Resorts.Where(a => a.UserId == userId).ToList();
                 List<ResortWithRegionDto> Result = new List<ResortWithRegionDto>();
                 Area theArea = null;
                 Country theCountry = null;
@@ -261,11 +262,11 @@ namespace Vacation_Booker.Repository
                     return null;
                 }
         }
-        public List<Resort> GetResorts()
+        public List<Resort> GetResorts(string userId)
         {
                 try
                 {
-                    return dc.Resorts.OrderByDescending(o => o.Id).ToList();
+                    return dc.Resorts.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {

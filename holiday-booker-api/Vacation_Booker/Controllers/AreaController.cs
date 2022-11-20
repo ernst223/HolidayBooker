@@ -19,17 +19,17 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpGet("area")]
-        public IActionResult getAreas()
+        [HttpGet("areawithuserid/{userId}")]
+        public IActionResult getAreas(string userId)
         {
-            return Ok(areaRepository.GetAreas());
+            return Ok(areaRepository.GetAreas(userId));
         }
 
         [Authorize]
-        [HttpGet("areadto")]
-        public IActionResult getAreasDto()
+        [HttpGet("areadtowithuserid/{userId}")]
+        public IActionResult getAreasDto(string userId)
         {
-            return Ok(areaRepository.GetAreasDto());
+            return Ok(areaRepository.GetAreasDto(userId));
         }
 
         [Authorize]
@@ -46,10 +46,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("area/add")]
-        public IActionResult addArea([FromBody] Area T)
+        [HttpPost("areawithuserid/add/{userId}")]
+        public IActionResult addArea([FromBody] Area T, string userId)
         {
-            return Ok(areaRepository.addArea(T));
+            return Ok(areaRepository.addArea(T, userId));
         }
 
         [Authorize]

@@ -17,10 +17,10 @@ namespace Vacation_Booker.Controllers
         {
             unitSizeRepository = new UnitSizeRepository(T);
         }
-        [HttpGet("unitsize")]
-        public IActionResult getUnitSizes()
+        [HttpGet("unitsizewithuserid/{userId}")]
+        public IActionResult getUnitSizes(string userId)
         {
-            return Ok(unitSizeRepository.GetUnitSizes());
+            return Ok(unitSizeRepository.GetUnitSizes(userId));
         }
 
         [HttpGet("unitsize/{id}")]
@@ -30,10 +30,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("unitsize/add")]
-        public IActionResult addUnitSizes([FromBody] UnitSizes T)
+        [HttpPost("unitsizewithuserid/add/{userId}")]
+        public IActionResult addUnitSizes([FromBody] UnitSizes T, string userId)
         {
-            return Ok(unitSizeRepository.AddUnitSize(T));
+            return Ok(unitSizeRepository.AddUnitSize(T, userId));
         }
 
         [Authorize]

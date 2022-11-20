@@ -20,10 +20,10 @@ namespace Vacation_Booker.Controllers
             vacationRepository = new VacationRepository(T);
         }
 
-        [HttpGet("stockwithdetails")]
-        public IActionResult getStockWithDetails()
+        [HttpGet("stockwithdetailswithuserid/{userId}")]
+        public IActionResult getStockWithDetails(string userId)
         {
-            var result = vacationRepository.getStockWithDetails();
+            var result = vacationRepository.getStockWithDetails(userId);
             if(result != null)
             {
                 return Ok(result);
@@ -35,10 +35,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpGet("vacation")]
-        public IActionResult getVacations()
+        [HttpGet("vacationwithuserid/{userId}")]
+        public IActionResult getVacations(string userId)
         {
-            return Ok(vacationRepository.GetVacations());
+            return Ok(vacationRepository.GetVacations(userId));
         }
 
         [Authorize]
@@ -49,24 +49,24 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpGet("vacationfordisplay")]
-        public IActionResult getVacationsForDisplay()
+        [HttpGet("vacationfordisplaywithuserid/{userId}")]
+        public IActionResult getVacationsForDisplay(string userId)
         {
-            return Ok(vacationRepository.GetVacationDisplay());
+            return Ok(vacationRepository.GetVacationDisplay(userId));
         }
 
         [Authorize]
-        [HttpPost("filtervacation")]
-        public IActionResult getFilteredVacation([FromBody] FilterStock T)
+        [HttpPost("filtervacationwithuserid/{userId}")]
+        public IActionResult getFilteredVacation([FromBody] FilterStock T, string userId)
         {
-            return Ok(vacationRepository.getFilteredVacation(T));
+            return Ok(vacationRepository.getFilteredVacation(T, userId));
         }
 
         [Authorize]
-        [HttpGet("filterbystate/{filter}")]
-        public IActionResult getFilterbyState(int filter)
+        [HttpGet("filterbystatewithuserid/{filter}/{userId}")]
+        public IActionResult getFilterbyState(int filter, string userId)
         {
-            return Ok(vacationRepository.getFilterByState(filter));
+            return Ok(vacationRepository.getFilterByState(filter, userId));
         }
 
         [Authorize]
@@ -91,17 +91,17 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("vacation/add")]
-        public IActionResult addVacation([FromBody] Vacation T)
+        [HttpPost("vacationwithuserid/add/{userId}")]
+        public IActionResult addVacation([FromBody] Vacation T, string userId)
         {
-            return Ok(vacationRepository.AddVacation(T));
+            return Ok(vacationRepository.AddVacation(T, userId));
         }
 
         [Authorize]
-        [HttpPost("vacation/addlist")]
-        public IActionResult addVacationlist([FromBody] VacationList T)
+        [HttpPost("vacationwithuserid/addlist/{userId}")]
+        public IActionResult addVacationlist([FromBody] VacationList T, string userId)
         {
-            return Ok(vacationRepository.AddVacationList(T.myList));
+            return Ok(vacationRepository.AddVacationList(T.myList, userId));
         }
 
         [Authorize]
@@ -133,10 +133,38 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("upload/vacation/csv/{supplier}/{adminFee}")]
-        public IActionResult uploadVacationCSV(IFormFile file, string supplier, int adminFee)
+        [HttpPost("uploadwithuserid/vacation/csv/{supplier}/{adminFee}/{userId}")]
+        public IActionResult uploadVacationCSV(IFormFile file, string supplier, int adminFee, string userId)
         {
-            return Ok(vacationRepository.uploadVactionCSV(file, supplier, adminFee));
+            return Ok(vacationRepository.uploadVactionCSV(file, supplier, adminFee, userId));
+        }
+
+        [Authorize]
+        [HttpGet("getPartnersStockwithuserid/{userId}")]
+        public IActionResult getPartnersStock(string userId)
+        {
+            return Ok(vacationRepository.getPartnersStock(userId));
+        }
+
+        [Authorize]
+        [HttpGet("updatedefaultpartnerpricewithuserid/{price}/{userId}")]
+        public IActionResult updateDefaultPartnerPrice(int price, string userId)
+        {
+            return Ok(vacationRepository.updateDefaultPartnerPrice(price, userId));
+        }
+
+        [Authorize]
+        [HttpGet("updatepartnerstockprofit/{stockId}/{price}")]
+        public IActionResult updatePartnerStockProfit(int stockId, int price)
+        {
+            return Ok(vacationRepository.updatePartnerStockProfit(stockId, price));
+        }
+
+        [Authorize]
+        [HttpGet("getuserdefaultprofitwithuserid/{userId}")]
+        public IActionResult getUserDefaultProfit(string userId)
+        {
+            return Ok(vacationRepository.getUserDefaultProfit(userId));
         }
     }
 }

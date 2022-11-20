@@ -1,0 +1,112 @@
+<div class="rightside-content-holder" fxLayout="row wrap" fxLayoutAlign="start start">
+    <mat-card class="mat-card" fxFlex="100">
+        <mat-card-content>
+            <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+                <div fxFlex="30" fxLayout="row wrap" class="filter-header" fxLayoutAlign="space-between center">
+                        <mat-form-field [fxFlex]=70 fxFlexOffset="3">
+                            <input type="number" name="txbDefaultProfit" [(ngModel)]="DefaultProfit" placeholder="Default Proft"
+                              aria-label="Number" matInput>
+                          </mat-form-field>
+                        <button type="button" class="ml-1" matTooltip="Save Default Profit Value" (click)=saveDefaultProfit() mat-raised-button
+                          color="primary">
+                          <mat-icon>save</mat-icon>
+                        </button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="mat-card tab-row" fxFlex="100">
+        <mat-card-content fxFlex="100" fxLayout="row wrap">
+            <div fxFlex="100" class="filter-header" fxLayoutAlign="space-between center">
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                  </mat-form-field>
+            </div>
+
+            <mat-table fxFlex="100" #table [dataSource]="orderDataSource" matSort>
+                <ng-container matColumnDef="Provider">
+                  <mat-header-cell *matHeaderCellDef > Provider </mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    <p> {{getUserProvider()}} </p>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Resort">
+                  <mat-header-cell *matHeaderCellDef fxHide.lt-md> Resort </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p> {{element.resort}}</p>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Unitsize">
+                  <mat-header-cell *matHeaderCellDef fxHide.lt-md> Unit Size </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p> {{element.unitSize}}</p>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Arrival">
+                  <mat-header-cell *matHeaderCellDef fxHide.lt-md> Arrival </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p> {{element.arrival  | date: 'dd/MM/yyyy'}}</p>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Nights">
+                  <mat-header-cell *matHeaderCellDef  fxHide.lt-md> Nights </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p> {{element.nights}}</p>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="BuyingPrice">
+                  <mat-header-cell *matHeaderCellDef fxHide.lt-md> Buying Price </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p> R{{element.price2Pay}}</p>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="MyPrice">
+                  <mat-header-cell *matHeaderCellDef fxHide.lt-md> My Price </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    <p *ngIf="!testEditabliity(element.id)"> R{{element.partnerPrice}}</p>
+                    <mat-form-field fxFlex="70px" *ngIf="testEditabliity(element.id)">
+                      <input type="number" [(ngModel)]="EditMyPriceValue" placeholder="My Price" aria-label="Number"
+                        matInput>
+                    </mat-form-field>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Profit">
+                  <mat-header-cell *matHeaderCellDef fxHide.lt-md> Profit </mat-header-cell>
+                  <mat-cell *matCellDef="let element" fxHide.lt-md>
+                    R{{getProfit(element.price2Pay, element.partnerPrice)}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Actions">
+                  <mat-header-cell *matHeaderCellDef style="min-width: 20px" fxLayoutAlign="end center">Actions
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="min-width: 20px" fxLayoutAlign="end center">
+                    <button matTooltip="Edit" *ngIf="!testEditabliity(element.id)" mat-icon-button color="primary"
+                      (click)="edit(element.id,element.partnerPrice)">
+                      <mat-icon aria-label="">edit</mat-icon>
+                    </button>
+        
+                    <button matTooltip="Save" *ngIf="testEditabliity(element.id)" mat-icon-button color="primary"
+                      (click)=SaveEdit(element.id)>
+                      <mat-icon aria-label="">save</mat-icon>
+                    </button>
+                    <button matTooltip="Cancel" *ngIf="testEditabliity(element.id)" mat-icon-button color="warn"
+                      (click)="ChangeEditMe()">
+                      <mat-icon aria-label="">cancel</mat-icon>
+                    </button>
+        
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"
+                  [ngClass]="{'edit-class': selectedRowIndex === row.id}"></mat-row>
+              </mat-table>
+              <div fxFlex="grow">
+                <mat-paginator #paginator [pageSize]="25" [pageSizeOptions]="[25, 50, 100]" [showFirstLastButtons]="true">
+                </mat-paginator>
+              </div>
+
+
+        </mat-card-content>
+    </mat-card>
+</div>
+

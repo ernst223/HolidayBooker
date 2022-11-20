@@ -13,10 +13,11 @@ namespace Vacation_Booker.Repository
         {
             dc = T;
         }
-        public bool AddCountry(Country T)
+        public bool AddCountry(Country T, string userId)
         {
                 try
                 {
+                    T.UserId = userId;
                     dc.Countries.Add(T);
                     dc.SaveChanges();
                     return true;
@@ -40,17 +41,29 @@ namespace Vacation_Booker.Repository
                     return false;
                 }
         }
-        public List<Country> GetCountries()
+        public List<Country> GetCountries(string userId)
         {
                 try
                 {
-                    var result = dc.Countries.ToList();
+                    var result = dc.Countries.Where(a => a.UserId == userId).ToList();
                     return result;
                 }
                 catch
                 {
                     return null;
                 }
+        }
+        public List<Country> GetCountries()
+        {
+            try
+            {
+                var result = dc.Countries.Where(a => a.UserId == "75c81754-5a66-45f9-8b05-060bf16434b9").ToList();
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
         public Country GetCountry(int id)
         {

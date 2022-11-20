@@ -22,5 +22,6 @@ namespace Vacation_Booker.Entities
         [MaxLength(256)]
         public string ResetCode { get; set; }
         public DateTime? ResetExpiryDate { get; set; }
+        public int DefaultProfitOnStock { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   //Ernst Local API
-  apiUrl: 'http://localhost:55081/'
+  apiUrl: 'http://localhost:55082/'
 
   //Staging
   //apiUrl: 'https://holidaybooker.co.za/api/'

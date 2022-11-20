@@ -27,6 +27,11 @@ export class MenuService {
         icon: 'monetization_on',
       });
       items.push({
+        title: 'Partners Stock',
+        route: '/stockadministration/view-partner-stock',
+        icon: 'monetization_on',
+      });
+      items.push({
         title: 'Dataset',
         route: '/datasetadministration/manage-dataset',
         icon: 'line_style',

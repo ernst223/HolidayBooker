@@ -42,6 +42,12 @@ export class LoginComponent implements OnInit {
 
         console.log(result);
       }
+    },
+    error => {
+      this.isLoading = false;
+      this.snackBar.open('Could not log in! Make sure your details are correct', '', {
+        duration: 2000,
+      }).afterDismissed().subscribe(() => { });
     });
   }
 }

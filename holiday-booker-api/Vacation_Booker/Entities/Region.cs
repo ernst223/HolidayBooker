@@ -14,6 +14,7 @@ namespace Vacation_Booker.Entities
         public int Id { get; set; }
         public string Description { get; set; }
         public Nullable<int> AreaId { get; set; }
-      
+        public string UserId { get; set; }
+
     }
 }

@@ -21,15 +21,23 @@ namespace Vacation_Booker.Controllers
             countryRepository = new CountryRepository(T);
             exportRepository = new ExportRepository(T);
         }
+
         [HttpGet("country")]
         public IActionResult getCountries()
-        
+
         {
             return Ok(countryRepository.GetCountries());
         }
 
-        [HttpGet("exportToExcel64Get/{SupplierId}/{ResortId}/{TheDate}")]
-        public IActionResult ExportToExcel64(int SupplierId, int ResortId, string TheDate)
+        [HttpGet("countrywithuserid/{userId}")]
+        public IActionResult getCountries(string userId)
+        
+        {
+            return Ok(countryRepository.GetCountries(userId));
+        }
+
+        [HttpGet("exportToExcel64Getwithuserid/{SupplierId}/{ResortId}/{TheDate}/{userId}")]
+        public IActionResult ExportToExcel64(int SupplierId, int ResortId, string TheDate, string userId)
         {
             using (MemoryStream ms = new MemoryStream())
             {
@@ -43,7 +51,7 @@ namespace Vacation_Booker.Controllers
                 }
                 temp.ResortId = ResortId;
                 temp.SupplierId = SupplierId;
-                var stream = exportRepository.GenerateReport(temp);
+                var stream = exportRepository.GenerateReport(temp, userId);
                 stream.CopyTo(ms);
                 var file = File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -63,10 +71,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("country/add")]
-        public IActionResult addCountry([FromBody] Country T)
+        [HttpPost("countrywithuserid/add/{userId}")]
+        public IActionResult addCountry([FromBody] Country T, string userId)
         {
-            return Ok(countryRepository.AddCountry(T));
+            return Ok(countryRepository.AddCountry(T, userId));
         }
 
         [Authorize]

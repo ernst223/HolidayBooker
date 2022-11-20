@@ -21,5 +21,6 @@ namespace Vacation_Booker.Models
         public int AdminFee { get; set; }
         public bool Sold { get; set; }
         public bool Hold { get; set; }
+        public int PartnerPrice { get; set; }
     }
 }

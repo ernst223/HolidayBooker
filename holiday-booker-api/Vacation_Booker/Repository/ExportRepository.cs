@@ -17,9 +17,9 @@ namespace Vacation_Booker.Repository
             vacationRepository = new VacationRepository(T);
         }
 
-        public Stream GenerateReport(FilterStock T)
+        public Stream GenerateReport(FilterStock T, string userId)
         {
-            var data = vacationRepository.getFilteredVacation(T).Where(o => o.Sold == false).ToList();
+            var data = vacationRepository.getFilteredVacation(T, userId).Where(o => o.Sold == false).ToList();
             var fileName = DateTime.Now.Ticks + ".xlsx";
             FileInfo file = new FileInfo(fileName);
             FileInfo templateFile = new FileInfo(@"Templates/ReportingTemplate.xlsx");

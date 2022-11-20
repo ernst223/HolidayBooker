@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Vacation_Booker.Entities;
 
@@ -13,10 +14,11 @@ namespace Vacation_Booker.Repository
         {
             dc = T;
         }
-        public bool AddSupplier(Supplier T)
+        public bool AddSupplier(Supplier T, string userId)
         {
                 try
                 {
+                    T.UserId = userId;
                     dc.Suppliers.Add(T);
                     dc.SaveChanges();
                     return true;
@@ -45,11 +47,11 @@ namespace Vacation_Booker.Repository
                 }
             
         }
-        public List<Supplier> GetSuppliers()
+        public List<Supplier> GetSuppliers(string userId)
         {
                 try
                 {
-                    return dc.Suppliers.OrderByDescending(o => o.Id).ToList();
+                return dc.Suppliers.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {

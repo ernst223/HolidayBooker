@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vacation_Booker.Entities;
 
 namespace Vacation_Booker.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20221120101327_addUserIdToStock")]
+    partial class addUserIdToStock
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,8 +270,6 @@ namespace Vacation_Booker.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<int>("DefaultProfitOnStock");
-
                     b.Property<bool>("Disabled");
 
                     b.Property<string>("Email")
@@ -339,8 +339,6 @@ namespace Vacation_Booker.Migrations
                     b.Property<bool>("Hold");
 
                     b.Property<int>("Nights");
-
-                    b.Property<int>("PartnersPrice");
 
                     b.Property<int>("Price2Pay");
 

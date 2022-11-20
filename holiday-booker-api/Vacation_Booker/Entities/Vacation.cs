@@ -30,5 +30,7 @@ namespace Vacation_Booker.Entities
         public int AdminFee { get; set; }
         public bool Sold { get; set; }
         public bool Hold { get; set; }
+        public string UserId { get; set; }
+        public int PartnersPrice { get; set; }
     }
 }

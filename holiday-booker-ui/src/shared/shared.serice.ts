@@ -19,7 +19,7 @@ export class SharedService {
 
   // Generating a Excel Spreadsheet
   generateExcelReport(T: FilterStock) {
-    this.httpClient.post(this.connectionstring + 'api/exportToExcel', T, {
+    this.httpClient.post(this.connectionstring + 'api/exportToExcelwithuserid' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
       , observe: 'response', responseType: 'blob'
     }).pipe(map
@@ -40,7 +40,7 @@ export class SharedService {
   }
   // Generating a Excel Spreadsheet
   generateExcelReport64(T: FilterStock) {
-    this.httpClient.post(this.connectionstring + 'api/exportToExcel64', T).pipe(map
+    this.httpClient.post(this.connectionstring + 'api/exportToExcel64withuserid' + "/" + localStorage.getItem('userId'), T).pipe(map
       ((res: any) => {
         console.log(res);
         //const url = window.URL.createObjectURL(res.body);
@@ -65,8 +65,8 @@ export class SharedService {
     } else {
       temp = T.theDate.toDateString();
     }
-    return this.httpClient.get(this.connectionstring + 'api/exportToExcel64Get/'+ T.supplierId + '/' +
-    T.resortId + '/' + temp, {
+    return this.httpClient.get(this.connectionstring + 'api/exportToExcel64Getwithuserid/'+ T.supplierId + '/' +
+    T.resortId + '/' + temp + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -89,7 +89,7 @@ export class SharedService {
 
   // Supplier
   public getSuppliers(): Observable<Array<Supplier>> {
-    return this.httpClient.get(this.connectionstring + 'api/supplier', {
+    return this.httpClient.get(this.connectionstring + 'api/supplierwithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -109,7 +109,7 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public addSupplier(T: Supplier): any {
-    return this.httpClient.post(this.connectionstring + 'api/supplier/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/supplierwithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -121,17 +121,17 @@ export class SharedService {
 
   // Resort
   public getResorts(): Observable<Array<Resort>> {
-    return this.httpClient.get(this.connectionstring + 'api/resort', {
+    return this.httpClient.get(this.connectionstring + 'api/resortwithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getLatestResort(): Observable<Resort> {
-    return this.httpClient.get(this.connectionstring + 'api/resort/last', {
+    return this.httpClient.get(this.connectionstring + 'api/resortwithuserid/last' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getResortsWithRegion(): Observable<Array<ResortWithRegionDto>> {
-    return this.httpClient.get(this.connectionstring + 'api/resortwithregion', {
+    return this.httpClient.get(this.connectionstring + 'api/resortwithregionwithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -146,7 +146,7 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public addResort(T: Resort): any {
-    return this.httpClient.post(this.connectionstring + 'api/resort/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/resortwithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -158,12 +158,12 @@ export class SharedService {
 
   // Region
   public getRegions(): Observable<Array<Region>> {
-    return this.httpClient.get(this.connectionstring + 'api/region', {
+    return this.httpClient.get(this.connectionstring + 'api/regionwithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getRegionsDto(): Observable<Array<RegionDto>> {
-    return this.httpClient.get(this.connectionstring + 'api/regiondto', {
+    return this.httpClient.get(this.connectionstring + 'api/regiondtowithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -178,7 +178,7 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public addRegion(T: Region): any {
-    return this.httpClient.post(this.connectionstring + 'api/region/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/regionwithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -190,12 +190,12 @@ export class SharedService {
 
   // Area
   public getAreas(): Observable<Array<Area>> {
-    return this.httpClient.get(this.connectionstring + 'api/area', {
+    return this.httpClient.get(this.connectionstring + 'api/areawithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getAreasDto(): Observable<Array<AreaDto>> {
-    return this.httpClient.get(this.connectionstring + 'api/areadto', {
+    return this.httpClient.get(this.connectionstring + 'api/areadtowithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -210,7 +210,7 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public addArea(T: Area): any {
-    return this.httpClient.post(this.connectionstring + 'api/area/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/areawithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -222,7 +222,7 @@ export class SharedService {
 
   // Country
   public getCountries(): Observable<Array<Country>> {
-    return this.httpClient.get(this.connectionstring + 'api/country', {
+    return this.httpClient.get(this.connectionstring + 'api/countrywithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -237,7 +237,7 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public addCountry(T: Country): any {
-    return this.httpClient.post(this.connectionstring + 'api/country/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/countrywithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -249,7 +249,7 @@ export class SharedService {
 
   // UnitSizes
   public getUnitSizes(): Observable<Array<UnitSizes>> {
-    return this.httpClient.get(this.connectionstring + 'api/unitsize', {
+    return this.httpClient.get(this.connectionstring + 'api/unitsizewithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -264,7 +264,7 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public addUnitSize(T: UnitSizes): any {
-    return this.httpClient.post(this.connectionstring + 'api/unitsize/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/unitsizewithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -275,13 +275,33 @@ export class SharedService {
   }
 
   // Vacation
+  public getPartnersStock(): Observable<Array<VacationForDisplayDto>> {
+    return this.httpClient.get(this.connectionstring + 'api/getPartnersStockwithuserid' + "/" + localStorage.getItem('userId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+  public getUserDefaultProfit(): Observable<number> {
+    return this.httpClient.get(this.connectionstring + 'api/getuserdefaultprofitwithuserid' + "/" + localStorage.getItem('userId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+  public updateDefaultPartnerPrice(price: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/updatedefaultpartnerpricewithuserid/' + price + "/" + localStorage.getItem('userId'), {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
+  public updatePartnerStockProfit(stockId: number, price: number): Observable<any> {
+    return this.httpClient.get(this.connectionstring + 'api/updatepartnerstockprofit/' + stockId + "/" + price, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
+    }).pipe(map((res: any) => res));
+  }
   public getVacations(): Observable<Array<Vacation>> {
-    return this.httpClient.get(this.connectionstring + 'api/vacation', {
+    return this.httpClient.get(this.connectionstring + 'api/vacationwithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getVacationsForDisplay(): Observable<Array<VacationForDisplayDto>> {
-    return this.httpClient.get(this.connectionstring + 'api/vacationfordisplay', {
+    return this.httpClient.get(this.connectionstring + 'api/vacationfordisplaywithuserid' + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -297,19 +317,19 @@ export class SharedService {
   }
   public addVacation(T: Vacation): any {
     console.log(T);
-    return this.httpClient.post(this.connectionstring + 'api/vacation/add', T, {
+    return this.httpClient.post(this.connectionstring + 'api/vacationwithuserid/add' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public addVacationList(T: VacationList): any {
     console.log(T);
-    return this.httpClient.post(this.connectionstring + 'api/vacation/addlist', T, {
+    return this.httpClient.post(this.connectionstring + 'api/vacationwithuserid/addlist' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getFilteredVaction(T: FilterStock): Observable<Array<VacationForDisplayDto>> {
     console.log(T);
-    return this.httpClient.post(this.connectionstring + 'api/filtervacation', T, {
+    return this.httpClient.post(this.connectionstring + 'api/filtervacationwithuserid' + "/" + localStorage.getItem('userId'), T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -319,12 +339,12 @@ export class SharedService {
     }).pipe(map((res: any) => res));
   }
   public getFilteredVactionBySate(filter: any): Observable<Array<VacationForDisplayDto>> {
-    return this.httpClient.get(this.connectionstring + 'api/filterbystate/' + `${filter}`, {
+    return this.httpClient.get(this.connectionstring + 'api/filterbystatewithuserid/' + `${filter}` + "/" + localStorage.getItem('userId'), {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
   public getDuplicatesForDisplay(T: Vacation[]): Observable<Array<displayDuplicatesDto>> {
-    return this.httpClient.post(this.connectionstring + 'api/getduplicatesfordisplay/', T, {
+    return this.httpClient.post(this.connectionstring + 'api/getduplicatesfordisplay', T, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));
   }
@@ -427,9 +447,9 @@ export class SharedService {
       reportProgress: false,
     };
     // 
-    const req = new HttpRequest('POST', this.connectionstring + 'api/upload/vacation/csv/' + `${supplierName}` + '/' + `${adminFee}`,
+    const req = new HttpRequest('POST', this.connectionstring + 'api/uploadwithuserid/vacation/csv/' + `${supplierName}` + '/' + `${adminFee}` + "/" + localStorage.getItem('userId'),
     formData );
-    return this.httpClient.post(this.connectionstring + 'api/upload/vacation/csv/' + `${supplierName}` + '/' + `${adminFee}`,
+    return this.httpClient.post(this.connectionstring + 'api/upload/vacation/csv/' + `${supplierName}` + '/' + `${adminFee}` + "/" + localStorage.getItem('userId'),
     formData, {
       headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('access_token')}`)
     }).pipe(map((res: any) => res));

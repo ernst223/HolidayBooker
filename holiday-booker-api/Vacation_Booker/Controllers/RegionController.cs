@@ -17,17 +17,17 @@ namespace Vacation_Booker.Controllers
         {
             regionRepository = new RegionRepository(T);
         }
-        [HttpGet("region")]
-        public IActionResult getRegions()
+        [HttpGet("regionwithuserid/{userId}")]
+        public IActionResult getRegions(string userId)
         {
-            return Ok(regionRepository.GetRegions());
+            return Ok(regionRepository.GetRegions(userId));
         }
 
         [Authorize]
-        [HttpGet("regiondto")]
-        public IActionResult getRegionsDto()
+        [HttpGet("regiondtowithuserid/{userId}")]
+        public IActionResult getRegionsDto(string userId)
         {
-            return Ok(regionRepository.GetRegionsDto());
+            return Ok(regionRepository.GetRegionsDto(userId));
         }
 
         [Authorize]
@@ -38,10 +38,10 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpPost("region/add")]
-        public IActionResult addRegion([FromBody] Region T)
+        [HttpPost("regionwithuserid/add/{userId}")]
+        public IActionResult addRegion([FromBody] Region T, string userId)
         {
-            return Ok(regionRepository.AddRegion(T));
+            return Ok(regionRepository.AddRegion(T, userId));
         }
 
         [Authorize]

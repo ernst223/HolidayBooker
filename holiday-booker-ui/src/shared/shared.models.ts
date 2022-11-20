@@ -114,6 +114,7 @@ export interface VacationForDisplayDto {
   AdminFee: number;
   Sold: boolean;
   Hold: boolean;
+  PartnerPrice: number;
 }
 
 export interface FilterStock {

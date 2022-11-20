@@ -10,6 +10,7 @@ import { MatSnackBarModule, MatAutocompleteModule, MatDialogModule } from '@angu
 import { SharedService } from 'src/shared/shared.serice';
 import { ViewduplicatesComponent } from './viewduplicates/viewduplicates.component';
 import { UploadcsvComponent } from './uploadcsv/uploadcsv/uploadcsv.component';
+import { ViewPartnerStockComponent } from './view-partner-stock/view-partner-stock.component';
 
 
 
@@ -29,7 +30,8 @@ import { UploadcsvComponent } from './uploadcsv/uploadcsv/uploadcsv.component';
     StockadministrationComponent,
     ViewStockComponent,
     ViewduplicatesComponent,
-    UploadcsvComponent
+    UploadcsvComponent,
+    ViewPartnerStockComponent
   ],
   providers: [
     SharedService,

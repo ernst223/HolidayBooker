@@ -15,7 +15,7 @@ namespace Vacation_Booker.Entities
         public string Description { get; set; }
         public string Link { get; set; }
         public string Coordinates { get; set; }
-
         public int? RegionId { get; set; }
+        public string UserId { get; set; }
     }
 }

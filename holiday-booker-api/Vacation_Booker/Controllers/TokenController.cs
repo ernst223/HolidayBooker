@@ -32,6 +32,18 @@ namespace Vacation_Booker.Controllers
         {
             try
             {
+                var user2 = await _userMgr.FindByNameAsync("EZTTravel");
+                if (user2 == null)
+                {
+                    User idu = new User()
+                    {
+                        UserName = "EZTTravel",
+                        Name = "EZTTravel",
+                        Email = "EZTTravel"
+                    };
+                    await _userMgr.CreateAsync(idu, "#EZTTravel321");
+                }
+
                 var user = await _userMgr.FindByNameAsync(model.UserName);
                 if (user != null)
                 {

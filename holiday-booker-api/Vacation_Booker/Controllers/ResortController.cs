@@ -19,17 +19,17 @@ namespace Vacation_Booker.Controllers
         }
 
         [Authorize]
-        [HttpGet("resort")]
-        public IActionResult getResort()
+        [HttpGet("resortwithuserid/{userId}")]
+        public IActionResult getResort(string userId)
         {
-            return Ok(resortRepository.GetResorts());
+            return Ok(resortRepository.GetResorts(userId));
         }
 
         [Authorize]
-        [HttpGet("resortwithregion")]
-        public IActionResult getResortWithRegion()
+        [HttpGet("resortwithregionwithuserid/{userId}")]
+        public IActionResult getResortWithRegion(string userId)
         {
-            return Ok(resortRepository.GetResortWithRegion());
+            return Ok(resortRepository.GetResortWithRegion(userId));
         }
 
         [Authorize]
@@ -39,17 +39,17 @@ namespace Vacation_Booker.Controllers
             return Ok(resortRepository.GetResort(id));
         }
 
-        [HttpGet("resort/last")]
-        public IActionResult getLatestResort()
+        [HttpGet("resortwithuserid/last/{userId}")]
+        public IActionResult getLatestResort(string userId)
         {
-            return Ok(resortRepository.lastResort());
+            return Ok(resortRepository.lastResort(userId));
         }
 
         [Authorize]
-        [HttpPost("resort/add")]
-        public IActionResult addResort([FromBody] Resort T)
+        [HttpPost("resortwithuserid/add/{userId}")]
+        public IActionResult addResort([FromBody] Resort T, string userId)
         {
-            return Ok(resortRepository.addResort(T));
+            return Ok(resortRepository.addResort(T, userId));
         }
 
         [Authorize]

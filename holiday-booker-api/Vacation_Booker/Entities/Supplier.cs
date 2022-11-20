@@ -16,5 +16,6 @@ namespace Vacation_Booker.Entities
         public string Description { get; set; }
         public string Email { get; set; }
         public string Contact { get; set; }
+        public string UserId { get; set; }
     }
 }

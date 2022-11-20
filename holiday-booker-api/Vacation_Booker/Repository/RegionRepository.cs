@@ -14,10 +14,11 @@ namespace Vacation_Booker.Repository
         {
             dc = T;
         }
-        public bool AddRegion(Region T)
+        public bool AddRegion(Region T, string userId)
         {
                 try
                 {
+                    T.UserId = userId;
                     dc.Regions.Add(T);
                     dc.SaveChanges();
                     return true;
@@ -42,22 +43,22 @@ namespace Vacation_Booker.Repository
                     return false;
                 }
         }
-        public List<Region> GetRegions()
+        public List<Region> GetRegions(string userId)
         {
                 try
                 {
-                    return dc.Regions.OrderByDescending(o => o.Id).ToList();
+                    return dc.Regions.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {
                     return null;
                 }
         }
-        public List<RegionDto> GetRegionsDto()
+        public List<RegionDto> GetRegionsDto(string userId)
         {
             try
             {
-                var data = dc.Regions.ToList();
+                var data = dc.Regions.Where(a => a.UserId == userId).ToList();
                 List<RegionDto> result = new List<RegionDto>();
                 Area tempValue = null;
                 foreach (var entity in data)

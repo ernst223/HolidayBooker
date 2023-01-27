@@ -26,6 +26,7 @@ export class AccountService {
                     // Stores access token & refresh token.
                     localStorage.setItem('access_token', res.token);
                     localStorage.setItem('userId', res.userId);
+                    localStorage.setItem('userName', username);
                     return true;
                 } else {
                     return false;

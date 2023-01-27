@@ -3,7 +3,8 @@
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="!(isHandset$ | async)">
         <div class="mt-1 ml-1 mb-1" fxLayout="row" fxLayoutAlign="center center">
-          <img class="logo" fxFlex="60" src="../../assets/newLogo.jpg">
+          <img *ngIf="isHBLogo()" class="logo" fxFlex="60" src="../../assets/newLogo.jpg">
+          <img *ngIf="!isHBLogo()" class="logo" fxFlex="60" src="../../assets/GlobalTravelAllianceLogo.png">
         </div>
         <mat-divider></mat-divider>
         <app-shell-nav-list [menuItems]="menuItems"></app-shell-nav-list>

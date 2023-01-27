@@ -47,7 +47,7 @@ namespace Vacation_Booker.Repository
         {
                 try
                 {
-                    return dc.UnitSizes.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
+                    return dc.UnitSizes.OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {

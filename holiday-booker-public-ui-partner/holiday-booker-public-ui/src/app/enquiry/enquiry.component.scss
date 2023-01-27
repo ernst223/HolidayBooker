@@ -1,0 +1,43 @@
+@media (max-width:800px) {
+  .available-table .mat-cell {
+      width: 99.5%;
+      font-size: 8.5px;
+      margin-left: 1px;
+      padding-left: 0;
+      padding-right: 0;
+      margin-right: 5px;
+  }
+
+  .available-table .mat-header-cell {
+      width: 99.5%;
+      font-size: 8.5px;
+      margin-left: 1px;
+      padding-left: 0;
+      padding-right: 0;
+      margin-right: 5px;
+  }
+}.search-container {
+  margin-top: 115px;
+}
+
+
+.full-width {
+  width: 100%;
+  justify-content: left;
+}
+
+.search-controls-container {
+  background: white;
+  min-height: 100px;
+}
+
+.myClass{
+  margin-bottom: 0.3em;
+  margin-right: 2em;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+}
+
+a:hover {
+  cursor: pointer;
+}

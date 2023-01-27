@@ -221,7 +221,7 @@ namespace Vacation_Booker.Repository
                     }
                     
                 }
-                return Result.OrderByDescending(o => o.Id).ToList();
+                return Result.OrderBy(o => o.Description).ToList();
             }
             catch
             {
@@ -244,7 +244,7 @@ namespace Vacation_Booker.Repository
                             Region = dc.Regions.Where(o => o.Id == entity.RegionId).FirstOrDefault().Description
                         });
                     }
-                    return Result.OrderByDescending(o => o.Id).ToList();
+                    return Result.OrderBy(o => o.Description).ToList();
                 }
                 catch
                 {
@@ -266,7 +266,7 @@ namespace Vacation_Booker.Repository
         {
                 try
                 {
-                    return dc.Resorts.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
+                    return dc.Resorts.Where(a => a.UserId == userId).OrderBy(o => o.Description).ToList();
                 }
                 catch
                 {

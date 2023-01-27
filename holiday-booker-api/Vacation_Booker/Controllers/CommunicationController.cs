@@ -30,6 +30,19 @@ namespace Vacation_Booker.Controllers
                 return BadRequest();
             }
         }
+        [HttpPost("enquirypartner")]
+        public IActionResult EnquiryPartner([FromBody] EnquiryDto T)
+        {
+            if (communicationRepository.EnquiryPartner(T))
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet("testInvoiceTable/{id}")]
         public IActionResult testInvoiceTable(int id)
         {
@@ -40,6 +53,19 @@ namespace Vacation_Booker.Controllers
         public IActionResult NewEmail(string email)
         {
             if (communicationRepository.NewEmailSubmitted(email))
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("newClientPartner/{email}")]
+        public IActionResult NewEmailPartner(string email)
+        {
+            if (communicationRepository.NewEmailSubmittedPartner(email))
             {
                 return Ok();
             }
@@ -62,10 +88,36 @@ namespace Vacation_Booker.Controllers
             }
         }
 
+        [HttpGet("invoice/partner/{id}/{email}/{name}/{lastname}/{dob}/{cell}/{kids}/{adults}")]
+        public IActionResult InvoiceClientPartner(int id, string email, string name, string lastname, string dob, string cell, int kids, int adults)
+        {
+            if (communicationRepository.InvoiceClientPartner(id, email, name, lastname, dob, cell, kids, adults))
+            {
+                return Ok("Client contacted and Emailed successfully!  If you press the Available button again the Client will be Emailed again.");
+            }
+            else
+            {
+                return BadRequest("Something went wrong. Did not contact the Client!");
+            }
+        }
+
         [HttpGet("notify/{id}/{email}/{name}/{lastname}")]
         public IActionResult NotifyClient(int id, string email, string name, string lastname)
         {
             if (communicationRepository.NotifyClient(id, email, name, lastname))
+            {
+                return Ok("Client notified and Emailed successfully! If you press the Sold Out button again the Client will be Emailed again.");
+            }
+            else
+            {
+                return BadRequest("Something went wrong. Did not notify the Client!");
+            }
+        }
+
+        [HttpGet("notify/partner/{id}/{email}/{name}/{lastname}")]
+        public IActionResult NotifyClientPartner(int id, string email, string name, string lastname)
+        {
+            if (communicationRepository.NotifyClientPartner(id, email, name, lastname))
             {
                 return Ok("Client notified and Emailed successfully! If you press the Sold Out button again the Client will be Emailed again.");
             }

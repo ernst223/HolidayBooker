@@ -5,19 +5,12 @@
 export const environment = {
   production: false,
   // Ernst Local API
-   apiUrl: 'http://localhost:55082/',
-
-  // Server
-  // apiUrl: 'http://ernstblignaut.dedicated.co.za/api/',
+   //apiUrl: 'http://localhost:55082/',
 
   // Server Real
-   //apiUrl: 'http://holidaybooker.co.za/api/'
-   //apiUrl: 'https://154.0.174.23:80/api/'
-   //apiUrl: 'https://154.0.174.23:443/api/'
-   //apiUrl: 'http://ernstblignaut.dedicated.co.za/api/'
- 
-  // Staging
- // apiUrl: 'http://hb.dankospark.co.za/api/'
+  apiUrl: 'https://holidaybooker.co.za/api/',
+  tokenUrl: 'https://holidaybooker.co.za/api/api/auth'
+
 };
 
 /*

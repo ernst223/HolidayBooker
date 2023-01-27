@@ -31,12 +31,13 @@ export class MenuService {
         route: '/stockadministration/view-partner-stock',
         icon: 'monetization_on',
       });
-      items.push({
-        title: 'Dataset',
-        route: '/datasetadministration/manage-dataset',
-        icon: 'line_style',
-      });
-  
+      if (localStorage.getItem('userName') == 'info@holidaybooker.co.za') {
+        items.push({
+          title: 'Dataset',
+          route: '/datasetadministration/manage-dataset',
+          icon: 'line_style',
+        });
+      }
 
     return items;
   }

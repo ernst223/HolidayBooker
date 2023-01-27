@@ -47,7 +47,7 @@ namespace Vacation_Booker.Repository
         {
                 try
                 {
-                    return dc.Regions.Where(a => a.UserId == userId).OrderByDescending(o => o.Id).ToList();
+                    return dc.Regions.OrderByDescending(o => o.Id).ToList();
                 }
                 catch
                 {
@@ -58,7 +58,7 @@ namespace Vacation_Booker.Repository
         {
             try
             {
-                var data = dc.Regions.Where(a => a.UserId == userId).ToList();
+                var data = dc.Regions.ToList();
                 List<RegionDto> result = new List<RegionDto>();
                 Area tempValue = null;
                 foreach (var entity in data)

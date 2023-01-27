@@ -1,0 +1,115 @@
+@import '~@swimlane/ngx-datatable/release/index.css';
+@import '~@swimlane/ngx-datatable/release/themes/material.css';
+@import '~@swimlane/ngx-datatable/release/assets/icons.css';
+
+.search-container {
+  margin-top: 115px;
+}
+
+.full-width {
+  width: 100%;
+  justify-content: left;
+}
+
+.search-controls-container {
+  background: white;
+  min-height: 100px;
+}
+
+.InstructionsText {
+  background: #FFC5B9;
+  font-size: 17;
+  text-align: center;
+  width: 100%;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.InstructionsTextSecondary {
+  font-size: 17;
+  text-align: center;
+  width: 100%;
+}
+
+.myImage {
+  width: 10em;
+  height: 4em;
+}
+
+#AboutSection {
+  padding: 15px;
+  padding-right: 15vw;
+  padding-left: 15vw;
+}
+
+#JoinSection {
+  padding: 15px;
+  padding-right: 15vw;
+  padding-left: 15vw;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #F6F6F6;
+}
+
+.mat-row:nth-child(odd) {
+  background-color: white;
+}
+
+@media (max-width:800px) {
+  .available-table .mat-cell {
+    width: 99.5%;
+    font-size: 8px;
+    margin-left: 1px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 5px;
+  }
+
+  .checkboxClass {
+    font-size: 12px;
+  }
+
+  .available-table .mat-header-cell {
+    width: 99.5%;
+    font-size: 8px;
+    margin-left: 1px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 5px;
+  }
+
+  .search-container {
+    margin-top: 20px;
+  }
+}
+
+
+.display-inline {
+  display: inline !important;
+}
+
+.heading-label {
+  font-weight: 700;
+  font-size: medium;
+  margin-bottom: 0;
+}
+
+.heading-label-region {
+  font-weight: 700;
+  font-size: medium;
+  margin-bottom: 0;
+margin-bottom: 8px;
+}
+
+.heading-label-arrive {
+  font-weight: 700;
+  font-size: medium;
+  margin-top: 10px;
+}
+
+.mat-calender{
+  min-width: 250px;
+}

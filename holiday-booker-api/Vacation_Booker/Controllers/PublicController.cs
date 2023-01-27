@@ -18,6 +18,13 @@ namespace Vacation_Booker.Controllers
             publicRepository = new PublicRepository(T);
         }
 
+        [HttpGet("cleanup")]
+        public IActionResult cleanup()
+        {
+            publicRepository.CleanVacations();
+            return Ok();
+        }
+
         [HttpPost("stock/filter")]
         public IActionResult getFilteredValues([FromBody]PublicFilterDto T)
         {
@@ -30,12 +37,6 @@ namespace Vacation_Booker.Controllers
             {
                 return BadRequest(data);
             }
-        }
-        [HttpPost("cleanup")]
-        public IActionResult cleanup()
-        {
-            publicRepository.CleanVacations();
-            return Ok();
         }
 
         [HttpPost("stock/fastfilter")]
@@ -57,6 +58,48 @@ namespace Vacation_Booker.Controllers
         {
             var data = publicRepository.GetAllStock();
             if(data != null)
+            {
+                return Ok(data);
+            }
+            else
+            {
+                return BadRequest(data);
+            }
+        }
+
+        [HttpPost("stock/filterpartner")]
+        public IActionResult getFilteredValuesPartner([FromBody] PublicFilterDto T)
+        {
+            var data = publicRepository.GetFilteredStockPartner(T);
+            if (data != null)
+            {
+                return Ok(data);
+            }
+            else
+            {
+                return BadRequest(data);
+            }
+        }
+
+        [HttpPost("stock/fastfilterpartner")]
+        public IActionResult getFastFilteredValuesPartner([FromBody] FastFilterDto T)
+        {
+            var data = publicRepository.GetFastFilteredStockPartner(T);
+            if (data != null)
+            {
+                return Ok(data);
+            }
+            else
+            {
+                return BadRequest(data);
+            }
+        }
+
+        [HttpGet("stock/allpartner")]
+        public IActionResult getAllStockPartner()
+        {
+            var data = publicRepository.GetAllStockPartner();
+            if (data != null)
             {
                 return Ok(data);
             }

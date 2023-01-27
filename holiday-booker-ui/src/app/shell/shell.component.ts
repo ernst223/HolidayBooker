@@ -30,6 +30,14 @@ export class ShellComponent implements OnInit {
     this.menuItems = this.menuService.getMenuItems();
   }
 
+  isHBLogo() {
+    if (localStorage.getItem('userName') == 'info@holidaybooker.co.za') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   signOut() {
     this.router.navigate(['']);
     localStorage.clear();

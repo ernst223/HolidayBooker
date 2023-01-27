@@ -17,6 +17,7 @@ namespace Vacation_Booker.Repository
         }
         //private string EmailFrom = "info@dankospark.co.za";
         private string EmailFrom = "info@holidaybooker.co.za";
+        private string EmailPartnerFrom = "reservations@twilightsolutions.co.za";
         public bool Enquiry(EnquiryDto T)
         {
             try
@@ -35,12 +36,48 @@ namespace Vacation_Booker.Repository
                 return false;
             }
         }
+
+        public bool EnquiryPartner(EnquiryDto T)
+        {
+            try
+            {
+                var stock = dc.Vacations.Where(o => o.Id == T.StockId).FirstOrDefault();
+                var resort = dc.Resorts.Where(o => o.Id == stock.ResortId).FirstOrDefault();
+                var supplier = dc.Suppliers.Where(o => o.Id == stock.SupplierId).FirstOrDefault();
+                var unitSize = dc.UnitSizes.Where(o => o.Id == stock.UnitSizeId).FirstOrDefault();
+                EmailToAdminPartnerAsync(T, stock, resort, supplier, unitSize);
+                //EmailToProviderAsync(T, stock, resort, supplier, unitSize);
+                EmailToClientPartnerAsync(T, stock, resort, supplier, unitSize);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public bool NotifyClient(int id, string email, string name, string lastname)
         {
             try
             {
                 //Send Email
                 SendNotificationAsync(id, email, name, lastname);
+
+                //Removing Vacation
+                dc.Vacations.Where(o => o.Id == id).First().Sold = true;
+                dc.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool NotifyClientPartner(int id, string email, string name, string lastname)
+        {
+            try
+            {
+                //Send Email
+                SendNotificationPartnerAsync(id, email, name, lastname);
 
                 //Removing Vacation
                 dc.Vacations.Where(o => o.Id == id).First().Sold = true;
@@ -71,11 +108,44 @@ namespace Vacation_Booker.Repository
                 return false;
             }
         }
+
+        public bool InvoiceClientPartner(int id, string email, string name, string lastname, string dob
+            , string cell, int kids, int adults)
+        {
+            try
+            {
+                //Setting the vacations status to Sold
+                var data = dc.Vacations.Where(o => o.Id == id).First();
+                data.Hold = true;
+                dc.SaveChanges();
+
+                //Send Email to Client
+                SendInvoicePartnerAsync(id, email, name, lastname, dob, cell, kids, adults);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public bool NewEmailSubmitted(string email)
         {
             try
             {
                 SendNewEmailAsync(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool NewEmailSubmittedPartner(string email)
+        {
+            try
+            {
+                SendNewEmailPartnerAsync(email);
                 return true;
             }
             catch
@@ -108,12 +178,48 @@ namespace Vacation_Booker.Repository
                 Console.WriteLine(sendResult.Status);
             }
         }
+
+        public async Task SendNewEmailPartnerAsync(string email)
+        {
+            var message = new TemplatedPostmarkMessage
+            {
+                To = EmailPartnerFrom,
+                From = EmailPartnerFrom,
+                TemplateAlias = "newEmail",
+                TemplateModel = new Dictionary<string, object>
+                {
+                    { "email", email }
+                }
+            };
+
+            var client = new PostmarkClient("ed8e2286-b9c5-4f33-b024-292c2b502b17");
+            var sendResult = await client.SendMessageAsync(message);
+
+            if (sendResult.Status == PostmarkStatus.Success)
+            {
+                Console.WriteLine(sendResult.Status);
+            }
+            else
+            {
+                Console.WriteLine(sendResult.Status);
+            }
+        }
         public async Task SendInvoiceAsync(int Id, string email, string name, string lastname, string dob
             ,string cell, int kids, int adults)
         {
             var stock = dc.Vacations.Where(o => o.Id == Id).FirstOrDefault();
             var resort = dc.Resorts.Where(o => o.Id == stock.ResortId).FirstOrDefault();
             var unitSize = dc.UnitSizes.Where(o => o.Id == stock.UnitSizeId).FirstOrDefault();
+            var currentOwner = dc.Users.Where(a => a.UserName == "info@holidaybooker.co.za").FirstOrDefault();
+            var stockOwner = dc.Users.Where(a => a.Id == stock.UserId).FirstOrDefault();
+            int thePrice = 0;
+            if (currentOwner.Id == stockOwner.Id)
+            {
+                thePrice = stock.Price2Pay;
+            } else
+            {
+                thePrice = stock.PartnersPrice;
+            }
 
             var message = new TemplatedPostmarkMessage
             {
@@ -133,9 +239,9 @@ namespace Vacation_Booker.Repository
                     { "resort" , resort.Description},
                     {  "unitSize", unitSize.Description},
                     { "stockId", addInvoice(stock.Id) },
-                    { "price2Pay", stock.Price2Pay },
+                    { "price2Pay", thePrice },
                     { "adminFee", stock.AdminFee },
-                    { "total", stock.Price2Pay + stock.AdminFee }
+                    { "total", thePrice + stock.AdminFee }
                 }
             };
 
@@ -154,6 +260,65 @@ namespace Vacation_Booker.Repository
                 Console.WriteLine(response.Message);
             }
         }
+
+        public async Task SendInvoicePartnerAsync(int Id, string email, string name, string lastname, string dob
+            , string cell, int kids, int adults)
+        {
+            var stock = dc.Vacations.Where(o => o.Id == Id).FirstOrDefault();
+            var resort = dc.Resorts.Where(o => o.Id == stock.ResortId).FirstOrDefault();
+            var unitSize = dc.UnitSizes.Where(o => o.Id == stock.UnitSizeId).FirstOrDefault();
+            var currentOwner = dc.Users.Where(a => a.UserName == "EZTTravel").FirstOrDefault();
+            var stockOwner = dc.Users.Where(a => a.Id == stock.UserId).FirstOrDefault();
+            int thePrice = 0;
+            if (currentOwner.Id == stockOwner.Id)
+            {
+                thePrice = stock.Price2Pay;
+            }
+            else
+            {
+                thePrice = stock.PartnersPrice;
+            }
+
+            var message = new TemplatedPostmarkMessage
+            {
+                To = email,
+                From = EmailPartnerFrom,
+                TemplateAlias = "invoice",
+                TemplateModel = new Dictionary<string, object>
+                {
+                    { "name", name },
+                    { "lastname" , lastname},
+                    { "dob" , dob},
+                    { "cell" , cell },
+                    { "kids" , kids },
+                    { "adults", adults},
+                    { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
+                    { "ddate", stock.Arrival.Date.AddDays(stock.Nights).ToString("dd/MM/yyyy")},
+                    { "resort" , resort.Description},
+                    {  "unitSize", unitSize.Description},
+                    { "stockId", addInvoice(stock.Id) },
+                    { "price2Pay", thePrice },
+                    { "adminFee", stock.AdminFee },
+                    { "total", thePrice + stock.AdminFee }
+                }
+            };
+
+            var client = new PostmarkClient("ed8e2286-b9c5-4f33-b024-292c2b502b17");
+
+            var response = await client.SendMessageAsync(message);
+
+            if (response.Status == PostmarkStatus.Success)
+            {
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
+            }
+            else
+            {
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
+            }
+        }
+
         public string addInvoice(int stockId)
         {
             var lastInvoice = dc.Invoices.OrderByDescending(o => o.Id).FirstOrDefault();
@@ -217,6 +382,42 @@ namespace Vacation_Booker.Repository
                 Console.WriteLine(response.Message);
             }
         }
+        public async Task SendNotificationPartnerAsync(int Id, string email, string name, string lastname)
+        {
+            var stock = dc.Vacations.Where(o => o.Id == Id).FirstOrDefault();
+            var resort = dc.Resorts.Where(o => o.Id == stock.ResortId).FirstOrDefault();
+            var unitSize = dc.UnitSizes.Where(o => o.Id == stock.UnitSizeId).FirstOrDefault();
+
+            var message = new TemplatedPostmarkMessage
+            {
+                To = email,
+                From = EmailPartnerFrom,
+                TemplateAlias = "soldOut",
+                TemplateModel = new Dictionary<string, object>
+                {
+                    { "name", name },
+                    { "lastname" , lastname},
+                    { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
+                    { "resort" , resort.Description},
+                    {  "unitSize", unitSize.Description},
+                }
+            };
+
+            var client = new PostmarkClient("ed8e2286-b9c5-4f33-b024-292c2b502b17");
+
+            var response = await client.SendMessageAsync(message);
+
+            if (response.Status == PostmarkStatus.Success)
+            {
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
+            }
+            else
+            {
+                Console.WriteLine(response.Status);
+                Console.WriteLine(response.Message);
+            }
+        }
         public async Task EmailToProviderAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
         {
             var message = new TemplatedPostmarkMessage
@@ -251,6 +452,18 @@ namespace Vacation_Booker.Repository
 
         public async Task EmailToClientAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
         {
+            var currentOwner = dc.Users.Where(a => a.UserName == "info@holidaybooker.co.za").FirstOrDefault();
+            var stockOwner = dc.Users.Where(a => a.Id == stock.UserId).FirstOrDefault();
+            int thePrice = 0;
+            if (currentOwner.Id == stockOwner.Id)
+            {
+                thePrice = stock.Price2Pay;
+            }
+            else
+            {
+                thePrice = stock.PartnersPrice;
+            }
+
             var message = new TemplatedPostmarkMessage
             {
                 To = T.Email,
@@ -263,7 +476,7 @@ namespace Vacation_Booker.Repository
                     { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
                     { "nights" , stock.Nights},
                     {  "unitsize", unitSize.Description},
-                    { "priceToPay", stock.Price2Pay },
+                    { "priceToPay", thePrice },
                     { "link", resort.Link },
                     { "adults", T.Adults },
                     { "kids", T.Under12 },
@@ -283,8 +496,23 @@ namespace Vacation_Booker.Repository
                 Console.WriteLine(sendResult.Status);
             }
         }
+
         public async Task EmailToAdminAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
         {
+            var currentOwner = dc.Users.Where(a => a.UserName == "info@holidaybooker.co.za").FirstOrDefault();
+            var stockOwner = dc.Users.Where(a => a.Id == stock.UserId).FirstOrDefault();
+            string provider = "";
+            int thePrice = 0;
+            if (currentOwner.Id == stockOwner.Id)
+            {
+                provider = dc.Suppliers.Where(a => a.Id == stock.SupplierId).FirstOrDefault().Description;
+                thePrice = stock.Price2Pay;
+            } else
+            {
+                provider = stockOwner.UserName;
+                thePrice = stock.PartnersPrice;
+            }
+
             var message = new TemplatedPostmarkMessage
             {
                 //To = "ernst.blignaut0@gmail.com",
@@ -298,18 +526,120 @@ namespace Vacation_Booker.Repository
                     { "resort" , resort.Description},
                     { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
                     {  "unitSize", unitSize.Description},
-                    { "priceToPay", stock.Price2Pay },
+                    { "priceToPay", thePrice },
                     { "dob", T.Dob },
                     { "email", T.Email },
                     { "cell", T.Cell },
                     { "id" ,  stock.Id},
                     { "adults", T.Adults },
                     { "kids", T.Under12 },
-                    { "note", T.Note }
+                    { "note", T.Note },
+                    { "provider", provider}
                 }
             };
 
             var client = new PostmarkClient("ba4b7707-54c8-49d7-83d5-e215483fe37c");
+            var sendResult = await client.SendMessageAsync(message);
+
+            if (sendResult.Status == PostmarkStatus.Success)
+            {
+                Console.WriteLine(sendResult.Status);
+            }
+            else
+            {
+                Console.WriteLine(sendResult.Status);
+            }
+        }
+
+        public async Task EmailToClientPartnerAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
+        {
+            var currentOwner = dc.Users.Where(a => a.UserName == "EZTTravel").FirstOrDefault();
+            var stockOwner = dc.Users.Where(a => a.Id == stock.UserId).FirstOrDefault();
+            int thePrice = 0;
+            if (currentOwner.Id == stockOwner.Id)
+            {
+                thePrice = stock.Price2Pay;
+            }
+            else
+            {
+                thePrice = stock.PartnersPrice;
+            }
+
+            var message = new TemplatedPostmarkMessage
+            {
+                To = T.Email,
+                From = EmailPartnerFrom,
+                TemplateAlias = "ClientEnquiry",
+                TemplateModel = new Dictionary<string, object>
+                {
+                    { "name", T.Name },
+                    { "resort" , resort.Description},
+                    { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
+                    { "nights" , stock.Nights},
+                    {  "unitsize", unitSize.Description},
+                    { "priceToPay", thePrice },
+                    { "link", resort.Link },
+                    { "adults", T.Adults },
+                    { "kids", T.Under12 },
+                    { "note", T.Note }
+                }
+            };
+
+            var client = new PostmarkClient("ed8e2286-b9c5-4f33-b024-292c2b502b17");
+            var sendResult = await client.SendMessageAsync(message);
+
+            if (sendResult.Status == PostmarkStatus.Success)
+            {
+                Console.WriteLine(sendResult.Status);
+            }
+            else
+            {
+                Console.WriteLine(sendResult.Status);
+            }
+        }
+
+        public async Task EmailToAdminPartnerAsync(EnquiryDto T, Vacation stock, Resort resort, Supplier supplier, UnitSizes unitSize)
+        {
+            var currentOwner = dc.Users.Where(a => a.UserName == "EZTTravel").FirstOrDefault();
+            var stockOwner = dc.Users.Where(a => a.Id == stock.UserId).FirstOrDefault();
+            string provider = "";
+            int thePrice = 0;
+            if (currentOwner.Id == stockOwner.Id)
+            {
+                provider = dc.Suppliers.Where(a => a.Id == stock.SupplierId).FirstOrDefault().Description;
+                thePrice = stock.Price2Pay;
+            }
+            else
+            {
+                provider = stockOwner.UserName;
+                thePrice = stock.PartnersPrice;
+            }
+
+            var message = new TemplatedPostmarkMessage
+            {
+                To = EmailPartnerFrom,
+                From = EmailPartnerFrom,
+                TemplateAlias = "new-enquiry",
+                TemplateModel = new Dictionary<string, object>
+                {
+                    { "name", T.Name },
+                    { "lastname", T.Lastname },
+                    { "resort" , resort.Description},
+                    { "date", stock.Arrival.Date.ToString("dd/MM/yyyy")},
+                    {  "unitSize", unitSize.Description},
+                    { "priceToPay", thePrice },
+                    { "dob", T.Dob },
+                    { "email", T.Email },
+                    { "cell", T.Cell },
+                    { "id" ,  stock.Id},
+                    { "adults", T.Adults },
+                    { "kids", T.Under12 },
+                    { "note", T.Note },
+                    { "provider", provider}
+                }
+            };
+
+            var client = new PostmarkClient("ed8e2286-b9c5-4f33-b024-292c2b502b17");
             var sendResult = await client.SendMessageAsync(message);
 
             if (sendResult.Status == PostmarkStatus.Success)
